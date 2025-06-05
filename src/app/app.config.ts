@@ -6,6 +6,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 
+// Import Web
+import { provideHttpClient } from '@angular/common/http';
+
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -17,6 +20,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura
       }
-    })
+    }),
+    provideHttpClient()
   ]
 };

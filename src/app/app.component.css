@@ -1,0 +1,138 @@
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 4rem;
+  background-color: #312e81;
+  color: #fff;
+}
+
+.logo {
+  margin-top: 1rem;
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+}
+
+.link {
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.link:hover,
+.link.active {
+  background-color: #4338ca;
+}
+
+.logoff {
+  margin-top: auto;
+  margin-bottom: 1rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.logoff:hover {
+  background-color: #4338ca;
+}
+
+.content {
+  flex: 1;
+  background-color: #f3f4f6;
+  overflow: auto;
+}
+.flex {
+  display: flex;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+
+
+
+/* Layout principal */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 4rem;
+  background-color: #312e81;
+  color: #fff;
+}
+
+.link {
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.link:hover,
+.link.active {
+  background-color: #4338ca;
+}
+
+/* Estilo do painel customizado */
+.custom-overlay {
+  display: none; /* Oculto por padrão */
+  position: fixed;
+  left: 4rem;
+  top: 40%;
+  min-width: 200px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 16px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Exibe o painel quando a classe 'show' é adicionada */
+.custom-overlay.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Estilo do conteúdo interno */
+.menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  margin: 8px 0;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.menu-link:hover {
+  color: #0056b3;
+}

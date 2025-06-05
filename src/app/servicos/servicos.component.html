@@ -1,0 +1,58 @@
+<!-- src/app/components/servico/servico.component.html -->
+<h1 class="text-center text-2xl font-bold my-4">Serviços</h1>
+
+<div class="grid">
+  <div class="col-13" style="display: flex; justify-content: flex-end; margin:10px; margin-right: 16px;">
+<p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+<span ></span>
+</div>
+</div>
+<p-table [value]="servicos" dataKey="id" selectionMode="single" [(selection)]="servicoSelecionado" [rows]="10" [paginator]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Preço Unitário</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-servico>
+      <tr [pSelectableRow]="servico">
+        <td>{{ servico.id }}</td>
+        <td>{{ servico.nome }}</td>
+        <td>{{ servico.precoUnitario | currency }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" severity="success" (click)="editarServico(servico)" class="p-button-rounded p-button-info"></button>
+          <button pButton icon="pi pi-trash" (click)="deletarServico(servico.id)" class="p-button-rounded p-button-danger"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  
+  <p-dialog header="Serviço" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" pInputText [(ngModel)]="servicoSelecionado.nome" />
+      </div>
+      <div class="p-field">
+        <label for="precoUnitario">Preço Unitário</label>
+        <p-inputNumber
+            id="preco"
+            [(ngModel)]="servicoSelecionado.precoUnitario"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+          ></p-inputNumber>
+      </div>
+    </div>
+    <p-footer>
+  <button pButton label="Cancelar" icon="pi pi-times" (click)="displayDialog = false"></button>
+  <button pButton label="Salvar" icon="pi pi-check" (click)="salvarServico()" [disabled]="!servicoSelecionado.nome || servicoSelecionado.precoUnitario <= 0"></button>
+</p-footer>
+
+  </p-dialog>
+  
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
