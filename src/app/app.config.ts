@@ -7,8 +7,6 @@ import Lara from '@primeng/themes/lara'
 import Material from '@primeng/themes/material'
 
 // Import Web
-import { provideHttpClient } from '@angular/common/http';
-
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -23,6 +21,16 @@ export const appConfig: ApplicationConfig = {
         preset: Aura
       }
     }),
-    provideHttpClient()
+    provideHttpClient(),
+    providePrimeNG({
+      theme: {
+        preset: Lara
+      }
+    }),
+    providePrimeNG({
+      theme: {
+        preset: Material
+      }
+    })
   ]
 };
