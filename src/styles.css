@@ -1,3 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+.sys-dialog {
+  @apply border border-black rounded-lg;
+}
+
+/* Mantém o header arredondado no topo */
+.sys-dialog .p-dialog-header {
+  @apply bg-blue-600 text-green-900 rounded-t-lg;
+}
+
+/* Conteúdo interno sem arredondar (já vem do pai), só cor de fundo */
+.sys-dialog .p-dialog-content {
+  @apply bg-white;
+}
+
+/* Mantém o footer arredondado na base */
+.sys-dialog .p-dialog-footer {
+  @apply bg-blue-600 text-green-900 rounded-b-lg;
+}
+
+.sys-dialog .p-inputtext {
+  @apply bg-white border border-black rounded-lg p-2;
+}
+
+/* foco, se quiser estilizar também */
+.sys-dialog .p-inputtext:focus {
+  @apply outline-none ring-2 ring-blue-600;
+}
+
+.sys-dialog .p-float-label label {
+  @apply bg-blue-600 text-red-600         /* cor que você quiser */
+}
+
+/* 2) Label “flutuado” quando o input está focado */
+.sys-dialog .p-float-label input:focus ~ label {
+  @apply bg-blue-600 text-red-600   /* mesma cor ou outra, como preferir */
+}
