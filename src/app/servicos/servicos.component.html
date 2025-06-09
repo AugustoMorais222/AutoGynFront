@@ -1,10 +1,9 @@
 <!-- src/app/components/servico/servico.component.html -->
-<h1 class="text-center text-2xl font-bold my-4">Serviços</h1>
+<h1 class="text-center text-2xl font-bold my-3">Serviços</h1>
 
 <div class="grid">
-  <div class="col-13" style="display: flex; justify-content: flex-end; margin:10px; margin-right: 16px;">
-<p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
-<span ></span>
+  <div class="col-12" style="display: flex; justify-content: flex-end; padding-right: 40px; padding-bottom: 20px;">
+     <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
 </div>
 </div>
 <p-table [value]="servicos" dataKey="id" selectionMode="single" [(selection)]="servicoSelecionado" [rows]="10" [paginator]="true">
@@ -30,7 +29,7 @@
   </p-table>
   
   
-  <p-dialog header="Serviço" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
+  <p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '600px', 'max-width': '90vw' }">
     <div class="p-fluid">
       <div class="p-field">
         <label for="nome">Nome</label>
@@ -47,12 +46,20 @@
           ></p-inputNumber>
       </div>
     </div>
-    <p-footer>
-  <button pButton label="Cancelar" icon="pi pi-times" (click)="displayDialog = false"></button>
-  <button pButton label="Salvar" icon="pi pi-check" (click)="salvarServico()" [disabled]="!servicoSelecionado.nome || servicoSelecionado.precoUnitario <= 0"></button>
-</p-footer>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="cancelDialog()"></button>
+      <button pButton type="button"
+              label="{{ servicoSelecionado.id ? 'Editar' : 'Adicionar' }}"
+              icon="pi pi-check"
+              (click)="salvarServico()"
+              [disabled]="!servicoSelecionado.nome || servicoSelecionado.precoUnitario <= 0">
+      </button>
+      <button *ngIf="servicoSelecionado.id" pButton type="button" label="Excluir" icon="pi pi-trash" class="p-button-danger"
+              (click)="deleteFromDialog()">
+      </button>
+    </ng-template>
 
   </p-dialog>
   
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>
 <p-toast></p-toast>

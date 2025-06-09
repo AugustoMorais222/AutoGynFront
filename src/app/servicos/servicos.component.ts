@@ -55,6 +55,7 @@ import { ToolbarModule } from 'primeng/toolbar';
   providers: [MessageService, ConfirmationService]
 })
 export class ServicosComponent implements OnInit {
+  dialogTitle: string = 'Serviço'; // Título do diálogo dinâmico
   servicos: Servicos[] = [];
   servicoSelecionado: Servicos = { id: 0, nome: '', precoUnitario: 0 };
   displayDialog: boolean = false;
@@ -114,9 +115,21 @@ export class ServicosComponent implements OnInit {
   }
   
 
+  showDialogToAdd() {
+    this.dialogTitle = 'Novo Serviço'; // Ajusta título para criação
+    this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
+    this.displayDialog = true;
+  }
+
   editarServico(servicos: Servicos) {
+    this.dialogTitle = 'Editar Serviço'; // Ajusta título para edição
     this.servicoSelecionado = { ...servicos };
     this.displayDialog = true;
+  }
+
+  cancelDialog() {
+    this.displayDialog = false;
+    this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 }; // Limpa dados ao cancelar
   }
 
   deletarServico(id: number) {
@@ -137,10 +150,27 @@ export class ServicosComponent implements OnInit {
       }
     });
   }
-  
 
-  showDialogToAdd() {
-    this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
-    this.displayDialog = true;
+  deleteFromDialog() {
+    if (this.servicoSelecionado.id) {
+      this.confirmationService.confirm({
+        message: 'Tem certeza que deseja excluir este serviço?',
+        header: 'Confirmar exclusão',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.servicosService.deletar(this.servicoSelecionado.id).subscribe(
+            () => {
+              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Serviço excluído com sucesso.' });
+              this.listarTodos();
+              this.displayDialog = false;
+              this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
+            },
+            error => {
+              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir o serviço.' });
+            }
+          );
+        }
+      });
+    }
   }
 }
