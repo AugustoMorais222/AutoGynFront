@@ -1,5 +1,5 @@
 export interface Servico {
-    id: number; // Altere para 'number' em vez de 'Long'
+    id: number;
     nome: string;
     precoUnitario: number;
   }

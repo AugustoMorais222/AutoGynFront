@@ -1,0 +1,181 @@
+<h1 class="text-center text-2xl font-bold my-4">Funcionários</h1>
+
+<div class="grid">
+  <div class="col-13" style="display: flex; justify-content: flex-end; margin:10px; margin-right: 16px;">
+    <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+  </div>
+</div>
+
+<p-table [value]="funcionarios" dataKey="id" selectionMode="single" [(selection)]="funcionarioSelecionado" [rows]="10" [paginator]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Salário</th>
+      <th>Data Nascimento</th>
+      <th>Admissão</th>
+      <th>Demissão</th>
+      <th>Cargo</th>
+      <th>Endereço</th>
+      <th>Telefone</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-funcionario>
+    <tr [pSelectableRow]="funcionario">
+      <td>{{ funcionario.id }}</td>
+      <td>{{ funcionario.nome }}</td>
+      <td>{{ funcionario.salario }}</td>
+      <td>{{ funcionario.dataNascimento }}</td>
+      <td>{{ funcionario.dataAdmissao }}</td>
+      <td>{{ funcionario.dataDemissao }}</td>
+      <td>{{ funcionario.cargo }}</td>
+      <td>{{ funcionario.endereco }}</td>
+      <td>{{ funcionario.telefone }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" severity="success" (click)="editarFuncionario(funcionario)" class="p-button-rounded p-button-info"></button>
+        <button pButton icon="pi pi-trash" (click)="deletarFuncionario(funcionario.id)" class="p-button-rounded p-button-danger"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  header="Funcionário"
+  [(visible)]="displayDialog"
+  styleClass="sys-dialog"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [responsive]="true"
+>
+  <div class="p-fluid">
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="nome">Nome</label>
+        <input
+          id="nome"
+          type="text"
+          pInputText
+          [(ngModel)]="funcionarioSelecionado.nome"
+          style="width: 100%;"
+        />
+      </p-floatLabel>
+    </div>
+    <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-inputNumber
+            inputId="salario"
+            [(ngModel)]="funcionarioSelecionado.salario"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            styleClass="w-full"
+          />
+          <label for="salario">Salário</label>
+        </p-floatLabel>
+      </div>
+      
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-datepicker
+            inputId="dataNascimento"
+            [(ngModel)]="funcionarioSelecionado.dataNascimento"
+            dateFormat="dd/mm/yy"
+            showIcon="true"
+            styleClass="w-full"
+          />
+          <label for="dataNascimento">Data de Nascimento</label>
+        </p-floatLabel>
+      </div>
+      
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-datepicker
+            inputId="dataAdmissao"
+            [(ngModel)]="funcionarioSelecionado.dataAdmissao"
+            dateFormat="dd/mm/yy"
+            showIcon="true"
+            styleClass="w-full"
+          />
+          <label for="dataAdmissao">Data de Admissão</label>
+        </p-floatLabel>
+      </div>
+      
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-datepicker
+            inputId="dataDemissao"
+            [(ngModel)]="funcionarioSelecionado.dataDemissao"
+            dateFormat="dd/mm/yy"
+            showIcon="true"
+            styleClass="w-full"
+          />
+          <label for="dataDemissao">Data de Demissão</label>
+        </p-floatLabel>
+      </div>
+      
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="cargo">Cargo</label>
+        <input
+          id="cargo"
+          type="text"
+          pInputText
+          [(ngModel)]="funcionarioSelecionado.cargo"
+          style="width: 100%;"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="endereco">Endereço</label>
+        <input
+          id="endereco"
+          type="text"
+          pInputText
+          [(ngModel)]="funcionarioSelecionado.endereco"
+          style="width: 100%;"
+        />
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-inputMask
+            id="telefone"
+            mask="(99) 99999-9999"
+            [(ngModel)]="funcionarioSelecionado.telefone"
+            styleClass="w-full"
+          />
+          <label for="telefone">Telefone</label>
+        </p-floatLabel>
+      </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="mt-4">
+        <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="displayDialog = false"
+        class="p-button-text"
+        ></button>
+        <button
+        pButton
+        type="button"
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarFuncionario()"
+        [disabled]="!funcionarioSelecionado.nome"
+        ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
