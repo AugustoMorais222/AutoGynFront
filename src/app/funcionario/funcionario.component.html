@@ -11,6 +11,7 @@
     <tr>
       <th>ID</th>
       <th>Nome</th>
+      <th>CPF</th>
       <th>Salário</th>
       <th>Data Nascimento</th>
       <th>Admissão</th>
@@ -25,13 +26,14 @@
     <tr [pSelectableRow]="funcionario">
       <td>{{ funcionario.id }}</td>
       <td>{{ funcionario.nome }}</td>
-      <td>{{ funcionario.salario }}</td>
-      <td>{{ funcionario.dataNascimento }}</td>
-      <td>{{ funcionario.dataAdmissao }}</td>
-      <td>{{ funcionario.dataDemissao }}</td>
+      <td>{{ formatarCPF(funcionario.cpf) }}</td>
+      <td>{{ funcionario.salario | currency : 'BRL'}}</td>
+      <td>{{ funcionario.dataNascimento | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ funcionario.dataAdmissao   | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ funcionario.dataDemissao   | date: 'dd/MM/yyyy' }}</td>
       <td>{{ funcionario.cargo }}</td>
       <td>{{ funcionario.endereco }}</td>
-      <td>{{ funcionario.telefone }}</td>
+      <td>{{ formatarTelefone(funcionario.telefone) }}</td>
       <td>
         <button pButton icon="pi pi-pencil" severity="success" (click)="editarFuncionario(funcionario)" class="p-button-rounded p-button-info"></button>
         <button pButton icon="pi pi-trash" (click)="deletarFuncionario(funcionario.id)" class="p-button-rounded p-button-danger"></button>
@@ -59,6 +61,17 @@
           [(ngModel)]="funcionarioSelecionado.nome"
           style="width: 100%;"
         />
+      </p-floatLabel>
+    </div>
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-inputMask
+          inputId="cpf"
+          mask="999.999.999-99"
+          [(ngModel)]="funcionarioSelecionado.cpf"
+          styleClass="w-full"
+        ></p-inputMask>
+        <label for="cpf">CPF</label>
       </p-floatLabel>
     </div>
     <div class="p-field mb-4">

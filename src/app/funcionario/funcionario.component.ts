@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
@@ -121,7 +119,12 @@ export class FuncionarioComponent implements OnInit {
   }
 
   editarFuncionario(funcionario: Funcionario) {
-    this.funcionarioSelecionado = { ...funcionario };
+    this.funcionarioSelecionado = {
+      ...funcionario,
+      dataNascimento: funcionario.dataNascimento ? new Date(funcionario.dataNascimento) : null,
+      dataAdmissao: funcionario.dataAdmissao ? new Date(funcionario.dataAdmissao) : null,
+      dataDemissao: funcionario.dataDemissao ? new Date(funcionario.dataDemissao) : null,
+    };
     this.displayDialog = true;
   }
 
@@ -153,13 +156,34 @@ export class FuncionarioComponent implements OnInit {
     return {
       id: 0,
       nome: '',
+      cpf: '',
       salario: 0,
-      dataNascimento: '',
-      dataAdmissao: '',
-      dataDemissao: '',
+      dataNascimento: null,
+      dataAdmissao: null,
+      dataDemissao: null,
       cargo: '',
       endereco: '',
       telefone: ''
     };
+  }
+  formatarCPF(cpf: string): string {
+    if (!cpf) return '';
+    return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+  }
+  formatarTelefone(telefone: string): string {
+    if (!telefone) return '';
+  
+    const nums = telefone.replace(/\D/g, '');
+  
+    if (nums.length === 10) {
+      return nums.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      
+    } else if (nums.length === 11) {
+
+      return nums.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else {
+
+      return telefone;
+    }
   }
 }
