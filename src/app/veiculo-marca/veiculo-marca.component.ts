@@ -21,7 +21,7 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MarcaService } from '../services/marca.service';
-import { Marca } from '../models/marca';
+import { Marca } from '../models/Marca';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 

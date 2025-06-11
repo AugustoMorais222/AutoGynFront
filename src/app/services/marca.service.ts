@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Marca } from '../models/marca';
+import { Marca } from '../models/Marca';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
