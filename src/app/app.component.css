@@ -1,0 +1,8 @@
+
+/* força o UL de itens a empurrar tudo pra direita */
+:host ::ng-deep p-menubar.app-menu .p-menubar-root-list {
+  margin-left: auto !important;
+}
+:host ::ng-deep .p-menubar-root-list {
+  margin-left: auto !important;
+}

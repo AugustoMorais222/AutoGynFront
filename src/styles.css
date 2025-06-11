@@ -37,3 +37,7 @@
 .sys-dialog .p-float-label input:focus ~ label {
   @apply bg-blue-600 text-red-600   
 */
+
+.p-menubar .p-menubar-root-list {
+  margin-left: auto !important;
+}
