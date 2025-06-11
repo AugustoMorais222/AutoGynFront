@@ -14,10 +14,6 @@ export interface Cliente {
   cnpj?: string;
   inscricaoEstadual?: string;
   contato?: string;
-  ddi1?: number;
-  ddd1?: number;
   numero1?: number;
-  ddi2?: number;
-  ddd2?: number;
   numero2?: number;
 }

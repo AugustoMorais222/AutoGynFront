@@ -1,0 +1,175 @@
+<h1 class="text-center text-2xl font-bold my-4">Clientes</h1>
+
+<div class="grid">
+  <div class="col-13" style="display: flex; justify-content: flex-end; margin:10px; margin-right: 16px;">
+    <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+  </div>
+</div>
+
+<p-table [value]="clientes" dataKey="id" selectionMode="single" [(selection)]="clienteSelecionado" [rows]="10" [paginator]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>CPF</th>
+      <th>CNPJ</th>
+      <th>Contato</th>
+      <th>Endereço</th>
+      <th>Telefone 1</th>
+      <th>Telefone 2</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-cliente>
+    <tr [pSelectableRow]="cliente">
+      <td>{{ cliente.id }}</td>
+      <td>{{ cliente.nome }}</td>
+      <td>{{ cliente.email }}</td>
+      <td>{{ formatarCPF(cliente.cpf) }}</td>
+      <td>{{ cliente.cnpj }}</td>
+      <td>{{ cliente.contato }}</td>
+      <td>{{ cliente.logradouro }}, {{ cliente.numero }} - {{ cliente.bairro }}, {{ cliente.cidade }} - {{ cliente.estado }} ({{ cliente.cep }})</td>
+      <td>{{ formatarTelefone(cliente.numero1) }}</td>
+      <td>{{ formatarTelefone(cliente.numero2) }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" severity="success" (click)="editarCliente(cliente)" class="p-button-rounded p-button-info"></button>
+        <button pButton icon="pi pi-trash" (click)="deletarCliente(cliente.id)" class="p-button-rounded p-button-danger"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  header="Cliente"
+  [(visible)]="displayDialog"
+  styleClass="sys-dialog"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  [responsive]="true"
+>
+  <div class="p-fluid">
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" pInputText [(ngModel)]="clienteSelecionado.nome" style="width: 100%;" />
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="email">Email</label>
+        <input id="email" type="email" pInputText [(ngModel)]="clienteSelecionado.email" style="width: 100%;" />
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-inputMask
+        inputId="cpf"
+        mask="999.999.999-99"
+        [(ngModel)]="clienteSelecionado.cpf"
+        styleClass="w-full"
+        ></p-inputMask>
+        <label for="cpf">CPF</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+          <p-inputMask
+            inputId="cnpj"
+            mask="99.999.999/9999-99"
+            [(ngModel)]="clienteSelecionado.cpf"
+            styleClass="w-full"
+          ></p-inputMask>
+          <label for="cnpj">CNPJ</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="contato">Contato</label>
+        <input id="contato" type="text" pInputText [(ngModel)]="clienteSelecionado.contato" style="width: 100%;" />
+      </p-floatLabel>
+    </div>
+
+    <div class="grid">
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+          <label for="logradouro">Logradouro</label>
+          <input id="logradouro" type="text" pInputText [(ngModel)]="clienteSelecionado.logradouro" style="width: 100%;" />
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+          <label for="numero">Número</label>
+          <input id="numero" type="text" pInputText [(ngModel)]="clienteSelecionado.numero" style="width: 100%;" />
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+          <label for="bairro">Bairro</label>
+          <input id="bairro" type="text" pInputText [(ngModel)]="clienteSelecionado.bairro" style="width: 100%;" />
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+          <label for="cidade">Cidade</label>
+          <input id="cidade" type="text" pInputText [(ngModel)]="clienteSelecionado.cidade" style="width: 100%;" />
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+          <label for="estado">Estado</label>
+          <input id="estado" type="text" pInputText [(ngModel)]="clienteSelecionado.estado" style="width: 100%;" />
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+            <p-inputMask
+                inputId="cep"
+                mask="99999-999"
+                [(ngModel)]="clienteSelecionado.cep"
+                styleClass="w-full"
+            ></p-inputMask>
+          <label for="cep">CEP</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="complemento">Complemento</label>
+        <input id="complemento" type="text" pInputText [(ngModel)]="clienteSelecionado.complemento" style="width: 100%;" />
+      </p-floatLabel>
+    </div>
+
+    <div class="grid">
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+            <p-inputMask id="numero1" mask="(99) 99999-9999" [(ngModel)]="clienteSelecionado.numero1" styleClass="w-full" />
+            <label for="numero1">Telefone 1</label>
+        </p-floatLabel>
+      </div>
+      <div class="col-6 mb-4">
+        <p-floatLabel variant="in">
+            <p-inputMask id="numero2" mask="(99) 99999-9999" [(ngModel)]="clienteSelecionado.numero2" styleClass="w-full" />
+            <label for="numero2">Telefone 2</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="mt-4">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+      <button pButton type="button" label="Salvar" icon="pi pi-check" (click)="salvarCliente()" [disabled]="!clienteSelecionado.nome"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
