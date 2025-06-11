@@ -1,0 +1,201 @@
+:host {
+  display: block;
+  background: #f7f8fa;
+  min-height: 100vh;
+  padding-bottom: 48px;
+}
+
+h1 {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #24292f;
+  font-size: 2.4rem;
+  letter-spacing: -1px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+/* Botão adicionar */
+:host ::ng-deep .p-button-success {
+  background: #27ae60;
+  border: none;
+}
+:host ::ng-deep .p-button-success:hover {
+  background: #219150;
+}
+
+/* Tabela */
+:host ::ng-deep .p-datatable {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.10);
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: #f4f6fb;
+  color: #222;
+  font-size: 1.07rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e9eaea;
+  padding: 1rem 0.75rem;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr > td {
+  background: #fff;
+  color: #23272f;
+  font-size: 1.03rem;
+  padding: 0.87rem 0.75rem;
+  border-bottom: 1px solid #f1f3f6;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr:nth-child(even) > td {
+  background: #f7f8fa;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr:hover > td {
+  background: #e4f4fb;
+  transition: background 0.2s;
+}
+
+/* Botões de ação */
+:host ::ng-deep .p-button-rounded {
+  border-radius: 50%;
+  width: 2.3rem;
+  height: 2.3rem;
+  margin-right: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .p-button-info {
+  background: #2563eb;
+  border: none;
+  color: #fff;
+}
+:host ::ng-deep .p-button-info:hover {
+  background: #1746a2;
+}
+
+:host ::ng-deep .p-button-danger {
+  background: #ef4444;
+  border: none;
+  color: #fff;
+}
+:host ::ng-deep .p-button-danger:hover {
+  background: #b91c1c;
+}
+
+/* Paginator */
+:host ::ng-deep .p-paginator {
+  background: transparent;
+  border: none;
+  padding-bottom: 1.5rem;
+}
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  background: #f4f6fb;
+  color: #222;
+  border-radius: 6px;
+  margin: 0 2px;
+  font-weight: 500;
+  transition: all 0.14s;
+}
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+}
+
+/* Dialog */
+:host ::ng-deep .p-dialog {
+  border-radius: 14px;
+  box-shadow: 0 4px 32px 0 rgba(44, 62, 80, 0.13);
+  background: #fff;
+  padding: 0;
+}
+
+:host ::ng-deep .p-dialog-header {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 14px 14px 0 0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+
+:host ::ng-deep .p-dialog-content {
+  padding: 2rem 1.5rem 1rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog-footer {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  background: transparent;
+}
+:host ::ng-deep .p-dialog .p-dialog-footer .p-button {
+  min-width: 120px;
+  margin-left: 8px;
+}
+:host ::ng-deep .p-dialog .p-dialog-footer .p-button-success {
+  background: #2563eb;
+  border: none;
+}
+:host ::ng-deep .p-dialog .p-dialog-footer .p-button-success:hover {
+  background: #1746a2;
+}
+:host ::ng-deep .p-dialog .p-button-text {
+  background: transparent;
+  color: #666;
+  border: none;
+}
+
+/* Inputs e labels no dialog */
+:host ::ng-deep .p-field label {
+  color: #23272f;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+:host ::ng-deep .p-dialog .p-inputtext,
+:host ::ng-deep .p-dialog .p-inputnumber input {
+  border-radius: 7px;
+  border: 1px solid #e5e7eb;
+  height: 2.3rem;
+  font-size: 1.03rem;
+  background: #f8fafc !important;
+  color: #23272f !important;
+  transition: border-color 0.2s;
+}
+:host ::ng-deep .p-dialog .p-inputtext:focus,
+:host ::ng-deep .p-dialog .p-inputnumber input:focus {
+  border-color: #2563eb;
+  outline: none;
+  background: #fff;
+}
+
+/* Confirm Dialog */
+:host ::ng-deep .p-confirm-dialog {
+  border-radius: 12px;
+  background: #fff;
+  color: #222;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.13);
+}
+
+/* Toast */
+:host ::ng-deep .p-toast {
+  border-radius: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 800px) {
+  :host ::ng-deep .p-datatable {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  :host ::ng-deep .p-dialog {
+    border-radius: 0;
+  }
+}

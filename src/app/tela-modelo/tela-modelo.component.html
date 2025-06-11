@@ -1,0 +1,65 @@
+<h1 class="text-center text-2xl font-bold my-4">Modelos</h1>
+
+<div class="grid">
+  <div class="col-12" style="display: flex; justify-content: flex-end; padding-right: 40px; padding-bottom: 20px;">
+     <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+  </div>
+</div>
+
+<p-table [value]="modelos" dataKey="id" selectionMode="single" [(selection)]="modeloSelecionado" [rows]="10" [paginator]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Marca</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-modelo>
+    <tr [pSelectableRow]="modelo">
+      <td>{{ modelo.id }}</td>
+      <td>{{ modelo.nome }}</td>
+      <td>{{ modelo.idMarca?.nome }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" severity="info" (click)="editarModelo(modelo)" class="p-button-rounded p-button-info"></button>
+        <button pButton icon="pi pi-trash" severity="danger" (click)="deletarModelo(modelo.id!)" class="p-button-rounded p-button-danger"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [responsive]="true"
+  [style]="{ width: '600px', 'max-width': '90vw' }"
+  [focusOnShow]="false">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="nome">Nome</label>
+      <input id="nome" pInputText [(ngModel)]="modeloSelecionado.nome" />
+    </div>
+    <div class="p-field">
+      <label for="marca">Marca</label>
+      <p-dropdown
+        class="white-dropdown"
+        [options]="marcas"
+        [(ngModel)]="modeloSelecionado.idMarca"
+        optionLabel="nome"
+        placeholder="Selecione uma marca"
+        appendTo="body"
+        [showClear]="true">
+      </p-dropdown>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="cancelDialog()"></button>
+    <button pButton [label]="modeloSelecionado.id ? 'Editar' : 'Adicionar'" icon="pi pi-check" class="p-button-success" (click)="salvarModelo()" [disabled]="!modeloSelecionado.nome || !modeloSelecionado.idMarca"></button>
+    <button *ngIf="modeloSelecionado.id" pButton label="Excluir" icon="pi pi-trash" class="p-button-danger" (click)="deleteFromDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>
+<p-toast></p-toast>
+
