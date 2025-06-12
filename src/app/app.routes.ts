@@ -7,5 +7,4 @@ export const routes: Routes = [
     {path: 'marcas',component:VeiculoMarcaComponent},
     {path: 'funcionarios',component:FuncionarioComponent},
     {path: 'clientes',component:ClienteComponent},
-
 ];

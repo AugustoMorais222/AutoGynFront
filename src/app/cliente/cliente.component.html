@@ -6,16 +6,18 @@
   </div>
 </div>
 
-<p-table [value]="clientes" dataKey="id" selectionMode="single" [(selection)]="clienteSelecionado" [rows]="10" [paginator]="true">
+<p-table [value]="clientes" class="text-sm" dataKey="id" selectionMode="single" [(selection)]="clienteSelecionado" [rows]="10" [paginator]="true">
   <ng-template pTemplate="header">
     <tr>
       <th>ID</th>
       <th>Nome</th>
       <th>Email</th>
-      <th>CPF</th>
-      <th>CNPJ</th>
+      <th>CPF/CNPJ</th>
+      <th>Inscrição Estadual</th>
       <th>Contato</th>
       <th>Endereço</th>
+      <th>Complemento</th>
+      <th>CEP</th>
       <th>Telefone 1</th>
       <th>Telefone 2</th>
       <th>Ações</th>
@@ -26,10 +28,12 @@
       <td>{{ cliente.id }}</td>
       <td>{{ cliente.nome }}</td>
       <td>{{ cliente.email }}</td>
-      <td>{{ formatarCPF(cliente.cpf) }}</td>
-      <td>{{ cliente.cnpj }}</td>
-      <td>{{ cliente.contato }}</td>
-      <td>{{ cliente.logradouro }}, {{ cliente.numero }} - {{ cliente.bairro }}, {{ cliente.cidade }} - {{ cliente.estado }} ({{ cliente.cep }})</td>
+      <td>{{ formatarCPF_CNPJ(cliente.cpf, cliente.cnpj) }}</td>
+      <td>{{ cliente.inscricaoEstadual ? cliente.inscricaoEstadual : '-' }}  </td>
+      <td>{{ cliente.contato ? cliente.contato : '-' }}</td>
+      <td>{{ cliente.endereco }} </td>
+      <td>{{ cliente.complemento }} </td>
+      <td>{{ cliente.cep }} </td>
       <td>{{ formatarTelefone(cliente.numero1) }}</td>
       <td>{{ formatarTelefone(cliente.numero2) }}</td>
       <td>
@@ -65,65 +69,72 @@
     </div>
 
     <div class="p-field mb-4">
-      <p-floatLabel variant="in">
-        <p-inputMask
-        inputId="cpf"
-        mask="999.999.999-99"
-        [(ngModel)]="clienteSelecionado.cpf"
-        styleClass="w-full"
-        ></p-inputMask>
-        <label for="cpf">CPF</label>
-      </p-floatLabel>
+      <p-float-label variant="in">
+        <p-select
+          inputId="tipo"
+          [options]="tiposClientes"
+          [(ngModel)]="clienteSelecionado.tipoCliente"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        ></p-select>
+      <label for="tipo">Tipo de Cliente</label>
+      </p-float-label>
     </div>
 
-    <div class="p-field mb-4">
-      <p-floatLabel variant="in">
+    <div *ngIf="clienteSelecionado.tipoCliente === 'PF'">
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
           <p-inputMask
-            inputId="cnpj"
-            mask="99.999.999/9999-99"
-            [(ngModel)]="clienteSelecionado.cpf"
-            styleClass="w-full"
+          inputId="cpf"
+          mask="999.999.999-99"
+          [(ngModel)]="clienteSelecionado.cpf"
+          styleClass="w-full"
           ></p-inputMask>
-          <label for="cnpj">CNPJ</label>
-      </p-floatLabel>
+          <label for="cpf">CPF</label>
+        </p-floatLabel>
+      </div>
     </div>
 
-    <div class="p-field mb-4">
-      <p-floatLabel variant="in">
-        <label for="contato">Contato</label>
-        <input id="contato" type="text" pInputText [(ngModel)]="clienteSelecionado.contato" style="width: 100%;" />
-      </p-floatLabel>
+    <div *ngIf="clienteSelecionado.tipoCliente === 'PJ'">
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+            <p-inputMask
+              inputId="cnpj"
+              mask="99.999.999/9999-99"
+              [(ngModel)]="clienteSelecionado.cpf"
+              styleClass="w-full"
+            ></p-inputMask>
+            <label for="cnpj">CNPJ</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-inputMask id="contato" mask="(99) 99999-9999" [(ngModel)]="clienteSelecionado.contato" styleClass="w-full" />
+          <label for="contato">Contato</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-inputNumber
+            inputId="inscricao"
+            mode="decimal"
+            [useGrouping]="false"
+            [(ngModel)]="clienteSelecionado.inscricaoEstadual"
+            styleClass="w-full"
+          ></p-inputNumber>
+          <label for="inscricao">Inscrição Estadual</label>
+        </p-floatLabel>
+      </div>
     </div>
 
     <div class="grid">
       <div class="col-6 mb-4">
         <p-floatLabel variant="in">
-          <label for="logradouro">Logradouro</label>
-          <input id="logradouro" type="text" pInputText [(ngModel)]="clienteSelecionado.logradouro" style="width: 100%;" />
-        </p-floatLabel>
-      </div>
-      <div class="col-6 mb-4">
-        <p-floatLabel variant="in">
-          <label for="numero">Número</label>
-          <input id="numero" type="text" pInputText [(ngModel)]="clienteSelecionado.numero" style="width: 100%;" />
-        </p-floatLabel>
-      </div>
-      <div class="col-6 mb-4">
-        <p-floatLabel variant="in">
-          <label for="bairro">Bairro</label>
-          <input id="bairro" type="text" pInputText [(ngModel)]="clienteSelecionado.bairro" style="width: 100%;" />
-        </p-floatLabel>
-      </div>
-      <div class="col-6 mb-4">
-        <p-floatLabel variant="in">
-          <label for="cidade">Cidade</label>
-          <input id="cidade" type="text" pInputText [(ngModel)]="clienteSelecionado.cidade" style="width: 100%;" />
-        </p-floatLabel>
-      </div>
-      <div class="col-6 mb-4">
-        <p-floatLabel variant="in">
-          <label for="estado">Estado</label>
-          <input id="estado" type="text" pInputText [(ngModel)]="clienteSelecionado.estado" style="width: 100%;" />
+          <label for="endereco">Endereço</label>
+          <input id="endereco" type="text" pInputText [(ngModel)]="clienteSelecionado.endereco" style="width: 100%;" />
         </p-floatLabel>
       </div>
       <div class="col-6 mb-4">

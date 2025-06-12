@@ -11,7 +11,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -25,6 +24,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputMaskModule } from 'primeng/inputmask';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-cliente',
@@ -40,7 +40,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     ConfirmDialogModule,
     InputTextModule,
     FileUploadModule,
-    DropdownModule,
+    SelectModule,
     TagModule,
     RadioButtonModule,
     RatingModule,
@@ -66,6 +66,11 @@ export class ClienteComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) { }
+
+  tiposClientes = [
+    { label: 'Pessoa Física', value: 'PF' },
+    { label: 'Pessoa Jurídica', value: 'PJ' }
+  ];
 
   ngOnInit() {
     this.listarTodos();
@@ -150,11 +155,7 @@ export class ClienteComponent implements OnInit {
     return {
       id: 0,
       nome: '',
-      logradouro: '',
-      numero: '',
-      bairro: '',
-      cidade: '',
-      estado: '',
+      endereco: '',
       cep: '',
       tipoCliente: '',
       email: '',
@@ -167,10 +168,18 @@ export class ClienteComponent implements OnInit {
       numero2: 0
     };
   }
-  formatarCPF(cpf: string): string {
-    if (!cpf) return '';
-    return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+  
+  formatarCPF_CNPJ(cpf: string, cnpj: string): string {
+
+    if(cpf.length > 0){
+      return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+    }
+    if (cnpj.length > 0) {
+      return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    }
+    return '-';
   }
+
   formatarTelefone(telefone: string): string {
     if (!telefone) return '';
   
