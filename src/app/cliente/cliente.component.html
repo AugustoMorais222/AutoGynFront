@@ -13,10 +13,7 @@
       <th>Nome</th>
       <th>Email</th>
       <th>CPF/CNPJ</th>
-      <th>Inscrição Estadual</th>
-      <th>Contato</th>
       <th>Endereço</th>
-      <th>Complemento</th>
       <th>CEP</th>
       <th>Telefone 1</th>
       <th>Telefone 2</th>
@@ -29,10 +26,7 @@
       <td>{{ cliente.nome }}</td>
       <td>{{ cliente.email }}</td>
       <td>{{ formatarCPF_CNPJ(cliente.cpf, cliente.cnpj) }}</td>
-      <td>{{ cliente.inscricaoEstadual ? cliente.inscricaoEstadual : '-' }}  </td>
-      <td>{{ cliente.contato ? cliente.contato : '-' }}</td>
       <td>{{ cliente.endereco }} </td>
-      <td>{{ cliente.complemento }} </td>
       <td>{{ cliente.cep }} </td>
       <td>{{ formatarTelefone(cliente.numero1) }}</td>
       <td>{{ formatarTelefone(cliente.numero2) }}</td>
@@ -108,26 +102,6 @@
             <label for="cnpj">CNPJ</label>
         </p-floatLabel>
       </div>
-
-      <div class="p-field mb-4">
-        <p-floatLabel variant="in">
-          <p-inputMask id="contato" mask="(99) 99999-9999" [(ngModel)]="clienteSelecionado.contato" styleClass="w-full" />
-          <label for="contato">Contato</label>
-        </p-floatLabel>
-      </div>
-
-      <div class="p-field mb-4">
-        <p-floatLabel variant="in">
-          <p-inputNumber
-            inputId="inscricao"
-            mode="decimal"
-            [useGrouping]="false"
-            [(ngModel)]="clienteSelecionado.inscricaoEstadual"
-            styleClass="w-full"
-          ></p-inputNumber>
-          <label for="inscricao">Inscrição Estadual</label>
-        </p-floatLabel>
-      </div>
     </div>
 
     <div class="grid">
@@ -148,13 +122,6 @@
           <label for="cep">CEP</label>
         </p-floatLabel>
       </div>
-    </div>
-
-    <div class="p-field mb-4">
-      <p-floatLabel variant="in">
-        <label for="complemento">Complemento</label>
-        <input id="complemento" type="text" pInputText [(ngModel)]="clienteSelecionado.complemento" style="width: 100%;" />
-      </p-floatLabel>
     </div>
 
     <div class="grid">

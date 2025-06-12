@@ -159,11 +159,8 @@ export class ClienteComponent implements OnInit {
       cep: '',
       tipoCliente: '',
       email: '',
-      complemento: '',
       cpf: '',
       cnpj: '',
-      inscricaoEstadual: '',
-      contato: '',
       numero1: 0,
       numero2: 0
     };
