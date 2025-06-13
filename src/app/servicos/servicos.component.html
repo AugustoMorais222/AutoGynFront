@@ -1,0 +1,65 @@
+<!-- src/app/components/servico/servico.component.html -->
+<h1 class="text-center text-2xl font-bold my-3">Serviços</h1>
+
+<div class="grid">
+  <div class="col-12" style="display: flex; justify-content: flex-end; padding-right: 40px; padding-bottom: 20px;">
+     <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+</div>
+</div>
+<p-table [value]="servicos" dataKey="id" selectionMode="single" [(selection)]="servicoSelecionado" [rows]="10" [paginator]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Preço Unitário</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-servico>
+      <tr [pSelectableRow]="servico">
+        <td>{{ servico.id }}</td>
+        <td>{{ servico.nome }}</td>
+        <td>{{ servico.precoUnitario | currency }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" severity="success" (click)="editarServico(servico)" class="p-button-rounded p-button-info"></button>
+          <button pButton icon="pi pi-trash" (click)="deletarServico(servico.id)" class="p-button-rounded p-button-danger"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  
+  <p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '600px', 'max-width': '90vw' }">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" pInputText [(ngModel)]="servicoSelecionado.nome" />
+      </div>
+      <div class="p-field">
+        <label for="precoUnitario">Preço Unitário</label>
+        <p-inputNumber
+            id="preco"
+            [(ngModel)]="servicoSelecionado.precoUnitario"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+          ></p-inputNumber>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="cancelDialog()"></button>
+      <button pButton type="button"
+              label="{{ servicoSelecionado.id ? 'Editar' : 'Adicionar' }}"
+              icon="pi pi-check"
+              (click)="salvarServico()"
+              [disabled]="!servicoSelecionado.nome || servicoSelecionado.precoUnitario <= 0">
+      </button>
+      <button *ngIf="servicoSelecionado.id" pButton type="button" label="Excluir" icon="pi pi-trash" class="p-button-danger"
+              (click)="deleteFromDialog()">
+      </button>
+    </ng-template>
+
+  </p-dialog>
+  
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>
+<p-toast></p-toast>
