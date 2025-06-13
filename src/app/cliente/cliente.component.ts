@@ -180,7 +180,7 @@ export class ClienteComponent implements OnInit {
   formatarTelefone(telefone: string): string {
     if (!telefone) return '';
   
-    const nums = telefone.replace(/\D/g, '');
+    const nums = telefone;
   
     if (nums.length === 10) {
       return nums.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');

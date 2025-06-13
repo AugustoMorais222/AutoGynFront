@@ -1,0 +1,90 @@
+<!-- ordem-servico.component.html -->
+<h1 class="text-center text-2xl font-bold my-4">Ordens de Serviço</h1>
+
+<div class="flex justify-end mb-3">
+  <button pButton type="button" label="Nova Ordem" icon="pi pi-plus" (click)="showDialogToAdd()"></button>
+</div>
+
+<p-table
+  [value]="ordens"
+  dataKey="numero"
+  [paginator]="true"
+  [rows]="10"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Número</th>
+      <th>Data</th>
+      <th>Status</th>
+      <th>Placa</th>
+      <th>Cliente</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-os>
+    <tr>
+      <td>{{ os.numero }}</td>
+      <td>{{ os.data | date:'dd/MM/yyyy' }}</td>
+      <td>{{ os.status }}</td>
+      <td>{{ os.placaVeiculo?.placa }}</td>
+      <td>{{ os.cliente?.nome }}</td>
+      <td class="flex gap-1">
+        <button pButton icon="pi pi-file-pdf" (click)="downloadPdf(os.numero)" class="p-button-rounded p-button-danger"></button>
+        <button pButton icon="pi pi-pencil" (click)="editar(os)" class="p-button-rounded p-button-success"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  header="{{ isEdit ? 'Editar Ordem' : 'Nova Ordem' }}"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{ width: '700PX' , height: '600px' }"
+  [responsive]="true"
+>
+  <div class="">
+    <div class="p-field">
+      <label for="status">Status</label>
+      <p-dropdown
+        id="status"
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione o status"
+        [(ngModel)]="ordem.status"
+      ></p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="placa">Placa do Veículo</label>
+      <input id="placa" type="text" pInputText [(ngModel)]="ordem.placaVeiculo" />
+    </div>
+
+    <div class="p-field">
+      <label for="cliente">Cliente</label>
+      <p-dropdown
+        [options]="clientes"
+        optionLabel="nome"
+        optionValue="id"
+        placeholder="Selecione um cliente"
+        [(ngModel)]="ordem.idCliente"
+        [filter]="true"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+    <button
+      pButton
+      label="Salvar"
+      icon="pi pi-check"
+      (click)="salvar()"
+      [disabled]="!ordem.status || !ordem.placaVeiculo || !ordem.idCliente"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
