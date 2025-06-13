@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 export class MarcaService {
   private apiUrl = 'http://localhost:8080/api/marcas';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<Marca[]> {
+  getMarcas(): Observable<Marca[]> {
     return this.http.get<Marca[]>(this.apiUrl);
   }
 
