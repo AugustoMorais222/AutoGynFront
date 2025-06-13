@@ -19,6 +19,16 @@ export const appConfig: ApplicationConfig = {
         preset: Aura
       }
     }),
-    provideHttpClient()
+    provideHttpClient(),
+    providePrimeNG({
+      theme: {
+        preset: Lara
+      }
+    }),
+    providePrimeNG({
+      theme: {
+        preset: Material
+      }
+    })
   ]
 };
