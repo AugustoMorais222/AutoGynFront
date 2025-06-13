@@ -39,7 +39,7 @@ import { RippleModule } from 'primeng/ripple';
 export class TelaModeloComponent implements OnInit {
   dialogTitle: string = 'Modelo';
   modelos: TelaModelo[] = [];
-  modeloSelecionado: TelaModelo = { id: 0, nome: '', idMarca: undefined };
+  modeloSelecionado: TelaModelo = { id: 0, nome: '', marca: undefined };
   selectedMarcaId: number | undefined;
   marcas: Marca[] = [];
   displayDialog: boolean = false;
@@ -58,13 +58,20 @@ export class TelaModeloComponent implements OnInit {
 
   listarTodos() {
     this.modeloService.getModelos().subscribe(
-      data => (this.modelos = data),
+      data => {
+        // Mapeia propriedade 'marca' do JSON para 'idMarca' do modelo
+        this.modelos = data.map(m => ({
+          id: m.id,
+          nome: m.nome,
+          idMarca: (m as any).marca
+        } as TelaModelo));
+      },
       () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar modelos.' })
     );
   }
 
   listarMarcas() {
-    this.marcaService.listarTodos().subscribe(
+    this.marcaService.getMarcas().subscribe(
       data => (this.marcas = data),
       () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar marcas.' })
     );
@@ -72,7 +79,7 @@ export class TelaModeloComponent implements OnInit {
 
   showDialogToAdd() {
     this.dialogTitle = 'Novo Modelo';
-    this.modeloSelecionado = { id: 0, nome: '', idMarca: undefined };
+    this.modeloSelecionado = { id: 0, nome: '', marca: undefined };
     this.selectedMarcaId = undefined;
     this.displayDialog = true;
   }
@@ -80,21 +87,21 @@ export class TelaModeloComponent implements OnInit {
   editarModelo(modelo: TelaModelo) {
     this.dialogTitle = 'Editar Modelo';
     this.modeloSelecionado = { ...modelo };
-    this.selectedMarcaId = modelo.idMarca?.id;
+    this.selectedMarcaId = modelo.marca?.id;
     this.displayDialog = true;
   }
 
   salvarModelo() {
-    if (!this.modeloSelecionado.nome || this.selectedMarcaId == null) {
-      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos.' });
-      return;
-    }
+    if (!this.modeloSelecionado.nome || !this.modeloSelecionado.marca) {
+  this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos.' });
+  return;
+}
 
-    // monta payload conforme API espera
     const payload = {
       nome: this.modeloSelecionado.nome,
       marca: { id: this.selectedMarcaId }
     };
+
 
     const operacao = this.modeloSelecionado.id
       ? this.modeloService.updateModelo(this.modeloSelecionado.id, payload)
@@ -113,7 +120,7 @@ export class TelaModeloComponent implements OnInit {
 
   cancelDialog() {
     this.displayDialog = false;
-    this.modeloSelecionado = { id: 0, nome: '', idMarca: undefined };
+    this.modeloSelecionado = { id: 0, nome: '', marca: undefined };
     this.selectedMarcaId = undefined;
   }
 
@@ -154,3 +161,5 @@ export class TelaModeloComponent implements OnInit {
     }
   }
 }
+
+

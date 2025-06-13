@@ -1,7 +1,7 @@
 import { Marca } from "./marca";
 
-export class TelaModelo {
-    id?: number;
-    nome?: string;
-    idMarca?: Marca;
+export interface TelaModelo {
+  id?: number;
+  nome: string;
+  marca?: Marca;
 }

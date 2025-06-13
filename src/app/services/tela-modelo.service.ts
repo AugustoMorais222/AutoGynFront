@@ -7,7 +7,7 @@ import { TelaModelo } from '../models/tela-modelo.model';
   providedIn: 'root'
 })
 export class ModeloService {
-  private apiUrl = 'http://localhost:8080/modelos'; // URL base da API para modelos
+  private apiUrl = 'http://localhost:8080/api/modelos'; // URL base da API para modelos
 
   constructor(private http: HttpClient) { }
 
