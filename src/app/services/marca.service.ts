@@ -11,7 +11,7 @@ export class MarcaService {
 
   constructor(private http: HttpClient) {}
 
-  getMarcas(): Observable<Marca[]> {
+  listarTodos(): Observable<Marca[]> {
     return this.http.get<Marca[]>(this.apiUrl);
   }
 
