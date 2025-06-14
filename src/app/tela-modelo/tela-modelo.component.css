@@ -1,0 +1,7 @@
+/* Estilos para o componente TelaModelo */
+:host ::ng-deep .p-dialog .p-fluid .p-field {
+  margin-bottom: 1rem;
+}
+:host ::ng-deep .p-table {
+  margin: 0 1rem;
+}
