@@ -1,0 +1,62 @@
+<h1 class="text-center text-2xl font-bold my-4">Peças</h1>
+
+<div class="grid">
+  <div class="col-12" style="display: flex; justify-content: flex-end; padding-right: 40px; padding-bottom: 20px;">
+     <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
+  </div>
+</div>
+
+<p-table [value]="pecas" dataKey="id" selectionMode="single" [(selection)]="pecaSelecionada" [rows]="10" [paginator]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Código</th>
+      <th>Nome</th>
+      <th>Preço Unitário</th>
+      <th>Quantidade</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-peca>
+    <tr [pSelectableRow]="peca">
+      <td>{{ peca.id }}</td>
+      <td>{{ peca.codigo }}</td>
+      <td>{{ peca.nome }}</td>
+      <td>{{ peca.precoUnitario | currency }}</td>
+      <td>{{ peca.quantidade }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" severity="info" (click)="editarPeca(peca)" class="p-button-rounded p-button-info"></button>
+        <button pButton icon="pi pi-trash" severity="danger" (click)="deletarPeca(peca.id!)" class="p-button-rounded p-button-danger"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '600px', 'max-width': '90vw' }">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="codigo">Código</label>
+      <input id="codigo" pInputText [(ngModel)]="pecaSelecionada.codigo" />
+    </div>
+    <div class="p-field">
+      <label for="nome">Nome</label>
+      <input id="nome" pInputText [(ngModel)]="pecaSelecionada.nome" />
+    </div>
+    <div class="p-field">
+      <label for="precoUnitario">Preço Unitário</label>
+      <p-inputNumber id="precoUnitario" [(ngModel)]="pecaSelecionada.precoUnitario" mode="currency" currency="BRL" locale="pt-BR"></p-inputNumber>
+    </div>
+    <div class="p-field">
+      <label for="quantidade">Quantidade</label>
+      <p-inputNumber id="quantidade" [(ngModel)]="pecaSelecionada.quantidade" [min]="0"></p-inputNumber>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="cancelDialog()"></button>
+    <button pButton [label]="pecaSelecionada.id ? 'Editar' : 'Adicionar'" icon="pi pi-check" class="p-button-success" (click)="salvarPeca()" [disabled]="!pecaSelecionada.codigo || !pecaSelecionada.nome"></button>
+    <button *ngIf="pecaSelecionada.id" pButton label="Excluir" icon="pi pi-trash" class="p-button-danger" (click)="deleteFromDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>
+<p-toast></p-toast>
