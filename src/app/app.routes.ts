@@ -4,12 +4,15 @@ import { FuncionarioComponent } from './funcionario/funcionario.component';
 import { AcessorioComponent } from './acessorios/acessorio.component';
 import { ClienteComponent } from './cliente/cliente.component';
 import { OrdemServicoComponent } from './ordem-servico/ordem-servico.component';
+import { TelaVeiculosComponent } from './tela-veiculos/tela-veiculos.component';
+import { TelaModeloComponent } from './tela-modelo/tela-modelo.component';
 
 export const routes: Routes = [
     { path: 'marcas', component: VeiculoMarcaComponent },
     { path: 'funcionarios', component: FuncionarioComponent },
     { path: 'acessorios', component: AcessorioComponent },
     { path: 'clientes', component: ClienteComponent },
-    { path: 'ordem-servico', component: OrdemServicoComponent }
-
+    { path: 'ordem-servico', component: OrdemServicoComponent },
+    { path: 'veiculos', component: TelaVeiculosComponent }, 
+    { path: 'modelos', component: TelaModeloComponent }
 ];

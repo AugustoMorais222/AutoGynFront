@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModeloService } from '../services/tela-modelo.service';
 import { TelaModelo } from '../models/tela-modelo.model';
-import { Marca } from '../models/marca';
+import { Marca } from '../models/Marca';
 import { MarcaService } from '../services/marca.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -71,7 +71,7 @@ export class TelaModeloComponent implements OnInit {
   }
 
   listarMarcas() {
-    this.marcaService.getMarcas().subscribe(
+    this.marcaService.listarTodos().subscribe(
       data => (this.marcas = data),
       () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar marcas.' })
     );
