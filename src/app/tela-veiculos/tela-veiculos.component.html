@@ -1,0 +1,97 @@
+<h1 class="text-center text-2xl font-bold my-4">Veículos</h1>
+
+<div class="grid">
+  <div class="col-13 flex justify-end m-2" style="padding-right: 40px; padding-bottom: 20px;">
+    <button pButton label="Adicionar" icon="pi pi-plus" (click)="openDialog()"></button>
+  </div>
+</div>
+
+<p-dialog header="{{ editMode ? 'Editar Veículo' : 'Adicionar Veículo' }}"
+          [(visible)]="displayDialog"
+          [modal]="true"
+          [closable]="false"
+          [style]="{ width: '20%' }">
+  <form [formGroup]="veiculoForm" (ngSubmit)="saveVeiculo()">
+    <div>
+      <label for="placa">Placa:</label><br/>
+      <input id="placa" formControlName="placa" />
+    </div>
+    <div class="p-field">
+      <label for="modelo">Modelo</label>
+      <p-dropdown
+        id="modelo"
+        [options]="modelos"
+        optionLabel="nome"
+        optionValue="id"
+        placeholder="Selecione modelo"
+        formControlName="modelo"
+      ></p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="marca">Marca</label>
+      <p-dropdown
+        id="marca"
+        [options]="marcas"
+        optionLabel="nome"
+        optionValue="id"
+        placeholder="Selecione marca"
+        formControlName="marca"
+      ></p-dropdown>
+    </div>
+
+    <div>
+      <label for="quilometragem">Quilometragem:</label><br/>
+      <input id="quilometragem" formControlName="quilometragem" />
+    </div>
+    <div>
+      <label for="chassi">Chassi:</label><br/>
+      <input id="chassi" formControlName="chassi" />
+    </div>
+    <div>
+      <label for="patrimonio">Patrimônio:</label><br/>
+      <input id="patrimonio" formControlName="patrimonio" />
+    </div>
+    <div class="p-field">
+      <label for="anoModelo">Ano Modelo:</label><br/>
+      <input id="anoModelo"
+             type="number"
+             formControlName="anoModelo"
+             [min]="currentYear"
+             max="2025" />
+    </div>
+    <div class="p-field">
+      <label for="anoFabricacao">Ano Fabricação:</label><br/>
+      <input id="anoFabricacao"
+             type="number"
+             formControlName="anoFabricacao"
+             [min]="currentYear"
+             max="2025" />
+    </div>
+    <button pButton label="Fechar" (click)="closeDialog()"></button>
+    <button pButton type="submit" label="{{ editMode ? 'Atualizar' : 'Salvar' }}"></button>
+  </form>
+</p-dialog>
+
+<table class="min-w-full border-collapse">
+  <thead>
+    <tr>
+      <th>Placa</th><th>Modelo</th><th>Marca</th><th>Quilometragem</th>
+      <th>Chassi</th><th>Patrimônio</th><th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let v of veiculos">
+      <td>{{ v.placa }}</td>
+      <td>{{ v.modelo?.nome }}</td>
+      <td>{{ v.modelo?.marca?.nome }}</td>
+      <td>{{ v.quilometragem }}</td>
+      <td>{{ v.chassi }}</td>
+      <td>{{ v.patrimonio }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" severity="success" (click)="editVeiculo(v)"></button>
+        <button pButton icon="pi pi-trash" severity="danger" (click)="deleteVeiculo(v.placa!)"></button>
+      </td>
+    </tr>
+  </tbody>
+</table>

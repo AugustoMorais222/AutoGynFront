@@ -1,4 +1,4 @@
-import { Marca } from "./marca";
+import { Marca } from "./Marca";
 
 export interface TelaModelo {
   id?: number;
