@@ -1,4 +1,3 @@
-<!-- src/app/components/servico/servico.component.html -->
 <h1 class="text-center text-2xl font-bold my-3">Serviços</h1>
 
 <div class="grid">
@@ -31,19 +30,30 @@
   
   <p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '600px', 'max-width': '90vw' }">
     <div class="p-fluid">
-      <div class="p-field">
-        <label for="nome">Nome</label>
-        <input id="nome" type="text" pInputText [(ngModel)]="servicoSelecionado.nome" />
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <label for="nome">Nome</label>
+          <input
+            id="nome"
+            type="text"
+            pInputText
+            [(ngModel)]="servicoSelecionado.nome"
+            style="width: 100%;"
+          />
+        </p-floatLabel>
       </div>
-      <div class="p-field">
-        <label for="precoUnitario">Preço Unitário</label>
-        <p-inputNumber
-            id="preco"
+      <div class="p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-inputNumber  
+            inputId="precoUnitario"
             [(ngModel)]="servicoSelecionado.precoUnitario"
             mode="currency"
             currency="BRL"
             locale="pt-BR"
-          ></p-inputNumber>
+            styleClass="w-full"
+          />
+          <label for="precoUnitario">Preço Unitário</label>
+        </p-floatLabel>
       </div>
     </div>
     <ng-template pTemplate="footer">

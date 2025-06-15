@@ -1,97 +1,168 @@
 <h1 class="text-center text-2xl font-bold my-4">Veículos</h1>
 
 <div class="grid">
-  <div class="col-13 flex justify-end m-2" style="padding-right: 40px; padding-bottom: 20px;">
-    <button pButton label="Adicionar" icon="pi pi-plus" (click)="openDialog()"></button>
+  <div class="col-13" style="display: flex; justify-content: flex-end; margin:10px; margin-right: 16px;">
+    <p-button label="Adicionar" icon="pi pi-plus" (click)="showDialogToAdd()"></p-button>
   </div>
 </div>
 
-<p-dialog header="{{ editMode ? 'Editar Veículo' : 'Adicionar Veículo' }}"
-          [(visible)]="displayDialog"
-          [modal]="true"
-          [closable]="false"
-          [style]="{ width: '20%' }">
-  <form [formGroup]="veiculoForm" (ngSubmit)="saveVeiculo()">
-    <div>
-      <label for="placa">Placa:</label><br/>
-      <input id="placa" formControlName="placa" />
-    </div>
-    <div class="p-field">
-      <label for="modelo">Modelo</label>
-      <p-dropdown
-        id="modelo"
-        [options]="modelos"
-        optionLabel="nome"
-        optionValue="id"
-        placeholder="Selecione modelo"
-        formControlName="modelo"
-      ></p-dropdown>
-    </div>
-
-    <div class="p-field">
-      <label for="marca">Marca</label>
-      <p-dropdown
-        id="marca"
-        [options]="marcas"
-        optionLabel="nome"
-        optionValue="id"
-        placeholder="Selecione marca"
-        formControlName="marca"
-      ></p-dropdown>
-    </div>
-
-    <div>
-      <label for="quilometragem">Quilometragem:</label><br/>
-      <input id="quilometragem" formControlName="quilometragem" />
-    </div>
-    <div>
-      <label for="chassi">Chassi:</label><br/>
-      <input id="chassi" formControlName="chassi" />
-    </div>
-    <div>
-      <label for="patrimonio">Patrimônio:</label><br/>
-      <input id="patrimonio" formControlName="patrimonio" />
-    </div>
-    <div class="p-field">
-      <label for="anoModelo">Ano Modelo:</label><br/>
-      <input id="anoModelo"
-             type="number"
-             formControlName="anoModelo"
-             [min]="currentYear"
-             max="2025" />
-    </div>
-    <div class="p-field">
-      <label for="anoFabricacao">Ano Fabricação:</label><br/>
-      <input id="anoFabricacao"
-             type="number"
-             formControlName="anoFabricacao"
-             [min]="currentYear"
-             max="2025" />
-    </div>
-    <button pButton label="Fechar" (click)="closeDialog()"></button>
-    <button pButton type="submit" label="{{ editMode ? 'Atualizar' : 'Salvar' }}"></button>
-  </form>
-</p-dialog>
-
-<table class="min-w-full border-collapse">
-  <thead>
+<p-table [value]="veiculos" class="text-sm" dataKey="id" selectionMode="single" [(selection)]="veiculoSelecionado" [rows]="10" [paginator]="true">
+  <ng-template pTemplate="header">
     <tr>
-      <th>Placa</th><th>Modelo</th><th>Marca</th><th>Quilometragem</th>
-      <th>Chassi</th><th>Patrimônio</th><th>Ações</th>
+      <th>Placa</th>
+      <th>Quilometragem</th>
+      <th>Chassi</th>
+      <th>Patrimonio</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Modelo/Fabricação</th>
+      <th>Ações</th>
     </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let v of veiculos">
-      <td>{{ v.placa }}</td>
-      <td>{{ v.modelo?.nome }}</td>
-      <td>{{ v.modelo?.marca?.nome }}</td>
-      <td>{{ v.quilometragem }}</td>
-      <td>{{ v.chassi }}</td>
-      <td>{{ v.patrimonio }}</td>
+  </ng-template>
+  <ng-template pTemplate="body" let-veiculo>
+    <tr [pSelectableRow]="veiculos">
+      <td>{{ veiculo.placa }}</td>
+      <td>{{ veiculo.quilometragem }}</td>
+      <td>{{ veiculo.chassi }}</td>
+      <td>{{ veiculo.patrimonio }}</td>
+      <td>{{ veiculo.modelo.marca.nome }} </td>
+      <td>{{ veiculo.modelo.nome}} </td>
+      <td>{{ veiculo.anoModelo +"/"+ veiculo.anoFabricacao}}</td>
       <td>
-        <button pButton icon="pi pi-pencil" severity="success" (click)="editVeiculo(v)"></button>
-        <button pButton icon="pi pi-trash" severity="danger" (click)="deleteVeiculo(v.placa!)"></button>
+        <button pButton icon="pi pi-pencil" severity="success" (click)="editVeiculo(veiculo)" class="p-button-rounded p-button-info"></button>
+        <button pButton icon="pi pi-trash" (click)="deleteVeiculo(veiculo.placa)" class="p-button-rounded p-button-danger"></button>
       </td>
     </tr>
-  </tbody>
-</table>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  header="Veículo"
+  [(visible)]="displayDialog"
+  styleClass="sys-dialog"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  [responsive]="true"
+>
+<div class="p-fluid">
+  <div class="p-field mb-4">
+    <p-floatLabel variant="in">
+      <input
+        id="placa"
+        type="text"
+        pInputText
+        [(ngModel)]="veiculoSelecionado.placa"
+        inputId="placa"
+        style="width:100%;"
+      />
+      <label for="placa">Placa</label>
+    </p-floatLabel>
+  </div>
+
+  <div class="p-field mb-4">
+    <p-floatLabel variant="in">
+      <p-inputNumber
+        [(ngModel)]="veiculoSelecionado.quilometragem"
+        mode="decimal"
+        inputId="quilometragem"
+        styleClass="w-full"
+      ></p-inputNumber>
+      <label for="quilometragem">Quilometragem</label>
+    </p-floatLabel>
+  </div>
+
+  <div class="p-field mb-4">
+    <p-floatLabel variant="in">
+      <input
+        id="chassi"
+        type="text"
+        pInputText
+        [(ngModel)]="veiculoSelecionado.chassi"
+        style="width:100%;"
+      />
+      <label for="chassi">Chassi</label>
+    </p-floatLabel>
+  </div>
+
+  <div class="p-field mb-4">
+    <p-floatLabel variant="in">
+      <p-inputNumber
+        [(ngModel)]="veiculoSelecionado.patrimonio"
+        mode="decimal"
+        inputId="patrimonio"
+        styleClass="w-full"
+      ></p-inputNumber>
+      <label for="patrimonio">Patrimônio</label>
+    </p-floatLabel>
+  </div>
+
+  <div class="grid">
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="marcas"
+          [(ngModel)]="marcaSelecionadaId"
+          optionLabel="nome"
+          optionValue="id"
+          (onChange)="onMarcaChange($event.value)"
+          styleClass="w-full"
+        ></p-select>
+        <label>Marca</label>
+      </p-floatLabel>
+    </div>
+  
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="modelos"
+          [(ngModel)]="veiculoSelecionado.modelo"
+          optionLabel="nome"
+          styleClass="w-full"
+        ></p-select>
+        <label>Modelo</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-inputNumber
+          [(ngModel)]="veiculoSelecionado.anoModelo"
+          [min]="1900"
+          [max]="currentYear"
+          inputId="anoModelo"
+          [useGrouping]="false"
+          styleClass="w-full"
+        ></p-inputNumber>
+        <label for="anoModelo">Ano Modelo</label>
+      </p-floatLabel>
+    </div>
+  
+    <!-- Ano Fabricação -->
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-inputNumber
+          [(ngModel)]="veiculoSelecionado.anoFabricacao"
+          [min]="1900"
+          [max]="currentYear"
+          inputId="anoFabricacao"
+          [useGrouping]="false"
+          styleClass="w-full"
+        ></p-inputNumber>
+        <label for="anoFabricacao">Ano Fabricação</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</div>
+
+  <ng-template pTemplate="footer">
+    <div class="mt-4">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+      <button pButton type="button" label="Salvar" icon="pi pi-check" (click)="saveVeiculo()" [disabled]="!veiculoSelecionado.placa"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

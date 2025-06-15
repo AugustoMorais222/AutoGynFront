@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
 import { NgModule } from '@angular/core';
 
 import { BrowserModule } from '@angular/platform-browser';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -51,11 +52,12 @@ import { ToolbarModule } from 'primeng/toolbar';
     RatingModule,
     FormsModule,
     InputNumberModule,
+    FloatLabelModule
   ],
   providers: [MessageService, ConfirmationService]
 })
 export class ServicosComponent implements OnInit {
-  dialogTitle: string = 'Serviço'; // Título do diálogo dinâmico
+  dialogTitle: string = 'Serviço';
   servicos: Servicos[] = [];
   servicoSelecionado: Servicos = { id: 0, nome: '', precoUnitario: 0 };
   displayDialog: boolean = false;
@@ -93,7 +95,7 @@ export class ServicosComponent implements OnInit {
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Serviço atualizado com sucesso.' });
           this.listarTodos();
           this.displayDialog = false;
-          this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 }; // Limpar os dados
+          this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
         },
         error => {
           this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar o serviço.' });
@@ -105,7 +107,7 @@ export class ServicosComponent implements OnInit {
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Serviço salvo com sucesso.' });
           this.listarTodos();
           this.displayDialog = false;
-          this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 }; // Limpar os dados
+          this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
         },
         error => {
           this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar o serviço.' });
@@ -116,20 +118,20 @@ export class ServicosComponent implements OnInit {
   
 
   showDialogToAdd() {
-    this.dialogTitle = 'Novo Serviço'; // Ajusta título para criação
+    this.dialogTitle = 'Novo Serviço';
     this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
     this.displayDialog = true;
   }
 
   editarServico(servicos: Servicos) {
-    this.dialogTitle = 'Editar Serviço'; // Ajusta título para edição
+    this.dialogTitle = 'Editar Serviço';
     this.servicoSelecionado = { ...servicos };
     this.displayDialog = true;
   }
 
   cancelDialog() {
     this.displayDialog = false;
-    this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 }; // Limpa dados ao cancelar
+    this.servicoSelecionado = { id: 0, nome: '', precoUnitario: 0 };
   }
 
   deletarServico(id: number) {

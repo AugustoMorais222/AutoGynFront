@@ -9,9 +9,9 @@
 <p-table [value]="marcas" dataKey="id" selectionMode="single" [(selection)]="marcaSelecionada" [rows]="10" [paginator]="true">
     <ng-template pTemplate="header">
       <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Ações</th>
+        <th style="width: 10%">ID</th>
+        <th style="width: 50%">Nome</th>
+        <th style="width: 10%">Ações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-marca>
