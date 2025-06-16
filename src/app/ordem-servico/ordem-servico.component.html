@@ -1,4 +1,3 @@
-<!-- ordem-servico.component.html -->
 <h1 class="text-center text-2xl font-bold my-4">Ordens de Serviço</h1>
 
 <div class="flex justify-end mb-3">
@@ -40,48 +39,335 @@
   header="{{ isEdit ? 'Editar Ordem' : 'Nova Ordem' }}"
   [(visible)]="displayDialog"
   [modal]="true"
-  [style]="{ width: '700PX' , height: '600px' }"
+  [style]="{ width: '800px', height: 'auto' }"
   [responsive]="true"
 >
-  <div class="">
-    <div class="p-field">
-      <label for="status">Status</label>
-      <p-dropdown
-        id="status"
-        [options]="statusOptions"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Selecione o status"
-        [(ngModel)]="ordem.status"
-      ></p-dropdown>
+    <div class="grid">
+      <div class="col-6 p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-select
+            [options]="statusOptions"
+            [(ngModel)]="ordem.status"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="w-full"
+          ></p-select>
+          <label>Status</label>
+        </p-floatLabel>
+      </div>
+
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="clientes"
+          [(ngModel)]="ordem.idCliente"
+          optionLabel="nome"
+          optionValue="id"
+          styleClass="w-full"
+        ></p-select>
+        <label>Cliente</label>
+      </p-floatLabel>
+    </div>
+  
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="veiculos"
+          [(ngModel)]="ordem.placaVeiculo"
+          optionLabel="placa"
+          optionValue="placa"
+          styleClass="w-full"
+        ></p-select>
+        <label>Veículo</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-6 p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-datepicker 
+            [(ngModel)]="dataAgora"
+            styleClass="w-full"
+            dateFormat="dd/mm/yy"
+            disabled="true"
+          ></p-datepicker >
+          <label>Data</label>
+        </p-floatLabel>
+      </div>
+  </div>
+
+  <p-tabView>
+    <p-tabPanel header="Serviços">
+       <div class="p-col-12">
+    <label class="p-mb-2"><b>SERVIÇOS EXECUTADOS</b></label>
+    <p-table [value]="itensServico" dataKey="servico.id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 25%">Serviço</th>
+          <th style="width: 15%">Funcionário</th>
+          <th style="width: 10%">Qtd</th>
+          <th style="width: 20%">Horário</th>
+          <th style="width: 15%">Preço Total</th>
+          <th style="width: 15%">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item let-ri="rowIndex">
+        <tr>
+          <td>{{ item.servico?.nome }}</td>
+          <td>{{ item.funcionario.nome }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.horarioInicio | date: 'HH:mm'}} - {{ item.horarioFim | date: 'HH:mm'}}</td>
+          <td>{{ item.precoTotal | currency:'BRL' }}</td>
+          <td class="text-center">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-danger"
+              (click)="removeServico(ri)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="6" class="text-right">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-plus"
+              label="Adicionar Serviço"
+              class="p-button-text"
+              (click)="showAddServicoDialog()"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog
+    header="Adicionar Serviço"
+    [(visible)]="displayAddServicoDialog"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    [closable]="false"
+  >
+    <div class="p-fluid">
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-dropdown
+            inputId="servico"
+            [options]="servicos"
+            optionLabel="nome"
+            [(ngModel)]="newItemServico.servico"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="servico">Serviço</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-dropdown
+            inputId="funcionario"
+            [options]="funcionarios"
+            optionLabel="nome"
+            [(ngModel)]="newItemServico.funcionario"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="funcionario">Funcionário</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-inputNumber
+            inputId="quantidade"
+            [(ngModel)]="newItemServico.quantidade"
+            [min]="1"
+            [showButtons]="true"
+            styleClass="w-full"
+          ></p-inputNumber>
+          <label for="quantidade">Quantidade</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col mb-4">
+          <p-floatlabel variant="in">
+            <p-datepicker
+              inputId="horarioInicio"
+              [(ngModel)]="newItemServico.horarioInicio"
+              [timeOnly]="true"
+              styleclass="w-full"
+              appendTo="body"
+            />
+            <label for="horarioInicio">Horário Início</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="p-field p-col mb-4">
+          <p-floatlabel variant="in">
+            <p-datepicker
+              inputId="horarioFim"
+              [(ngModel)]="newItemServico.horarioFim"
+              [timeOnly]="true"
+              appendTo="body"
+              inputStyleClass="w-full"
+            />
+            <label for="horarioFim">Horário Fim</label>
+          </p-floatlabel>
+        </div>
+      </div>
     </div>
 
-    <div class="p-field">
-      <label for="placa">Placa do Veículo</label>
-      <input id="placa" type="text" pInputText [(ngModel)]="ordem.placaVeiculo" />
-    </div>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="displayAddServicoDialog = false"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="addServico()"
+        [disabled]="!newItemServico.servico || !newItemServico.funcionario"
+      ></button>
+    </ng-template>
+  </p-dialog>
+    </p-tabPanel>
+  
+    <p-tabPanel header="Peças">
+      <div class="p-col-12">
+    <label class="p-mb-2"><b>PEÇAS USADAS</b></label>
+    <p-table [value]="itensPeca" dataKey="peca.id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 40%">Peça</th>
+          <th style="width: 20%">Quantidade</th>
+          <th style="width: 20%">Preço Total</th>
+          <th style="width: 20%">Ações</th>
+        </tr>
+      </ng-template>
 
-    <div class="p-field">
-      <label for="cliente">Cliente</label>
-      <p-dropdown
-        [options]="clientes"
+    <ng-template pTemplate="body" let-item let-ri="rowIndex">
+      <tr>
+        <td>{{ item.peca.nome }}</td>
+        <td>{{ item.quantidade }}</td>
+        <td>{{ item.precoTotal | currency:'BRL' }}</td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-danger"
+            (click)="removePeca(ri)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="4" class="text-right">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Adicionar Peça"
+            class="p-button-text"
+            (click)="showAddPecaDialog()"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  header="Adicionar Peça"
+  [(visible)]="displayAddPecaDialog"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [closable]="false"
+>
+  <div class="p-fluid">
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <p-dropdown
+        inputId="peca"
+        [options]="pecas"
         optionLabel="nome"
-        optionValue="id"
-        placeholder="Selecione um cliente"
-        [(ngModel)]="ordem.idCliente"
-        [filter]="true"
-      ></p-dropdown>
+        [(ngModel)]="newItemPeca.peca"
+        appendTo="body"
+        styleClass="w-full"
+        ></p-dropdown>
+        <label for="peca">Peça</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <p-inputNumber
+        inputId="quantidade"
+        [(ngModel)]="newItemPeca.quantidade"
+        [min]="1"
+        [showButtons]="true"
+        styleClass="w-full"
+        ></p-inputNumber>
+        <label for="quantidade">Quantidade</label>
+      </p-floatlabel>
     </div>
   </div>
 
   <ng-template pTemplate="footer">
-    <button pButton label="Cancelar" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="displayAddPecaDialog = false"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Salvar"
+      icon="pi pi-check"
+      (click)="addPeca()"
+      [disabled]="!newItemPeca.peca"
+    ></button>
+  </ng-template>
+  </p-dialog>
+    </p-tabPanel>
+  </p-tabView>
+  
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancelar"
+      icon="pi pi-times"
+      (click)="displayDialog = false"
+      class="p-button-text"
+    ></button>
     <button
       pButton
       label="Salvar"
       icon="pi pi-check"
       (click)="salvar()"
-      [disabled]="!ordem.status || !ordem.placaVeiculo || !ordem.idCliente"
+      [disabled]="
+        !ordem.status ||
+        !ordem.placaVeiculo ||
+        !ordem.idCliente      "
     ></button>
   </ng-template>
 </p-dialog>

@@ -1,7 +1,7 @@
 
 export interface ItemServicoRequest {
-  horarioInicio: string;   // ex: "08:00"
-  horarioFim: string;      // ex: "12:00"
+  horarioInicio: string | null;   
+  horarioFim: string | null;     
   quantidade: number;
   funcionarioId: number;
   servicoId: number;

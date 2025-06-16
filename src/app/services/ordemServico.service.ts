@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OrdemServicoRequest } from '../models/OrdemServicoRequest';
 import { OrdemServico } from '../models/OrdemServico';
+import { ItensPeca } from '../models/ItensPeca';
+import { ItensServico } from '../models/ItensServico';
 
 
 
@@ -38,5 +40,13 @@ export class OrdemServicoService {
   }
   deletar(numero: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${numero}`);
+  }
+
+  listarItensServico(numero: number): Observable<ItensServico[]>{
+    return this.http.get<ItensServico[]>(`${this.apiUrl}/${numero}/itensServico`)
+  }
+
+  listarItensPeca(numero: number): Observable<ItensPeca[]>{
+    return this.http.get<ItensPeca[]>(`${this.apiUrl}/${numero}/itensPeca`)
   }
 }
