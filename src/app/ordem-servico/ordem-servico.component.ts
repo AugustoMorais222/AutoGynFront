@@ -170,7 +170,7 @@ export class OrdemServicoComponent implements OnInit {
   }
 
   private loadClientes(): void {
-    this.http.get<Cliente[]>('http://localhost:8081/api/clientes').subscribe({
+    this.http.get<Cliente[]>('http://localhost:8080/api/clientes').subscribe({
       next: data => this.clientes = data,
       error: () =>
         this.messageService.add({

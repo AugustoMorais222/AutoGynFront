@@ -8,7 +8,7 @@ import { Marca } from '../models/Marca';
   providedIn: 'root'
 })
 export class ModeloService {
-  private apiUrl = 'http://localhost:8081/api/modelos';
+  private apiUrl = 'http://localhost:8080/api/modelos';
 
   constructor(private http: HttpClient) { }
 

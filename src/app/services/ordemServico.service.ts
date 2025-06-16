@@ -12,7 +12,7 @@ import { ItensServico } from '../models/ItensServico';
   providedIn: 'root'
 })
 export class OrdemServicoService {
-  private apiUrl = 'http://localhost:8081/api/ordemServico';
+  private apiUrl = 'http://localhost:8080/api/ordemServico';
 
   constructor(private http: HttpClient) { }
 
@@ -43,10 +43,10 @@ export class OrdemServicoService {
   }
 
   listarItensServico(numero: number): Observable<ItensServico[]>{
-    return this.http.get<ItensServico[]>(`${this.apiUrl}/${numero}/servicos`)
+    return this.http.get<ItensServico[]>(`${this.apiUrl}/${numero}/itensServico`)
   }
 
   listarItensPeca(numero: number): Observable<ItensPeca[]>{
-    return this.http.get<ItensPeca[]>(`${this.apiUrl}/${numero}/pecas`)
+    return this.http.get<ItensPeca[]>(`${this.apiUrl}/${numero}/itensPeca`)
   }
 }

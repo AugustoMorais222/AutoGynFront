@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PecaService {
-  private apiUrl = 'http://localhost:8081/api/pecas';
+  private apiUrl = 'http://localhost:8080/api/pecas';
 
   constructor(private http: HttpClient) { }
 
