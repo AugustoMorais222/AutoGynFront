@@ -267,8 +267,7 @@ export class OrdemServicoComponent implements OnInit {
   }
 
   editar(os: OrdemServico) {
-    this.listarItensServico(os.numero)
-    this.listarItensPeca(os.numero)
+    
     this.isEdit = true;
     this.ordem = {
       numero: os.numero,
@@ -278,26 +277,20 @@ export class OrdemServicoComponent implements OnInit {
           ? os.placaVeiculo
           : os.placaVeiculo.placa,
       idCliente: os.cliente.id,
-      itensPeca: this.itensPeca.map(item => ({
-        quantidade: item.quantidade,
-        pecaId: item.peca.id as number,
-      })),
-      itensServico: this.itensServico.map(item => ({
-          horarioInicio: this.formatDateToBackend(item.horarioInicio),
-          horarioFim: this.formatDateToBackend(item.horarioFim),
-          quantidade: item.quantidade,
-          funcionarioId: item.funcionario!.id!,
-          servicoId: item.servico!.id,
-        }))
+      itensPeca: [],
+      itensServico: []
     };
-    this.displayDialog = true;
+    this.listarItensServico(os.numero)
+    this.listarItensPeca(os.numero)
+    setTimeout(() => {
+      this.displayDialog = true;
+    }, 200);
   }
 
   listarItensServico(numero: number){
     this.ordemServicoService.listarItensServico(numero).subscribe({ 
         next: (data) => {
           this.itensServico = data;
-          console.log("Itens servico: "+this.itensServico)
         },
         error: () =>{
            this.messageService.add({
@@ -315,7 +308,6 @@ export class OrdemServicoComponent implements OnInit {
     this.ordemServicoService.listarItensPeca(numero).subscribe({ 
         next: (data) => {
           this.itensPeca = data;
-          console.log("Itens peca: "+this.itensPeca)
         },
         error: () =>{
            this.messageService.add({

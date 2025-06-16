@@ -1,4 +1,3 @@
-<!-- ordem-servico.component.html -->
 <h1 class="text-center text-2xl font-bold my-4">Ordens de Serviço</h1>
 
 <div class="flex justify-end mb-3">
@@ -96,7 +95,6 @@
   </div>
 
   <p-tabView>
-    <!-- Aba de Serviços -->
     <p-tabPanel header="Serviços">
        <div class="p-col-12">
     <label class="p-mb-2"><b>SERVIÇOS EXECUTADOS</b></label>
@@ -114,7 +112,7 @@
 
       <ng-template pTemplate="body" let-item let-ri="rowIndex">
         <tr>
-          <td>{{ item.servico.nome }}</td>
+          <td>{{ item.servico?.nome }}</td>
           <td>{{ item.funcionario.nome }}</td>
           <td>{{ item.quantidade }}</td>
           <td>{{ item.horarioInicio | date: 'HH:mm'}} - {{ item.horarioFim | date: 'HH:mm'}}</td>
@@ -148,7 +146,6 @@
     </p-table>
   </div>
 
-  <!-- Diálogo de Adição de Serviço -->
   <p-dialog
     header="Adicionar Serviço"
     [(visible)]="displayAddServicoDialog"
@@ -248,7 +245,6 @@
   </p-dialog>
     </p-tabPanel>
   
-    <!-- Aba de Peças -->
     <p-tabPanel header="Peças">
       <div class="p-col-12">
     <label class="p-mb-2"><b>PEÇAS USADAS</b></label>
@@ -296,7 +292,6 @@
   </p-table>
 </div>
 
-<!-- Diálogo de Adição de Peça -->
 <p-dialog
   header="Adicionar Peça"
   [(visible)]="displayAddPecaDialog"
