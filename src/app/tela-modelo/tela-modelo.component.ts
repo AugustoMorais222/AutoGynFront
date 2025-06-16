@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModeloService } from '../services/tela-modelo.service';
-import { TelaModelo } from '../models/tela-modelo.model';
 import { Marca } from '../models/Marca';
 import { MarcaService } from '../services/marca.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -69,7 +68,7 @@ export class TelaModeloComponent implements OnInit {
           id: m.id,
           nome: m.nome,
           idMarca: (m as any).marca
-        } as TelaModelo));
+        } as Modelo));
       },
       () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar modelos.' })
     );
@@ -97,9 +96,13 @@ export class TelaModeloComponent implements OnInit {
     this.displayDialog = true;
   }
 
-  editarModelo(modelo: TelaModelo) {
+  editarModelo(modelo: Modelo) {
     this.dialogTitle = 'Editar Modelo';
-    this.modeloSelecionado = { ...modelo };
+    this.modeloSelecionado = {
+      id: modelo.id,
+      nome: modelo.nome,
+      marca: modelo.marca
+    };    
     this.selectedMarcaId = modelo.marca?.id;
     this.displayDialog = true;
   }

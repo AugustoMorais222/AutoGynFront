@@ -13,6 +13,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RippleModule } from 'primeng/ripple';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 
 @Component({
   selector: 'app-peca',
@@ -30,7 +32,8 @@ import { RippleModule } from 'primeng/ripple';
     ToolbarModule,
     ConfirmDialogModule,
     InputTextModule,
-    InputNumberModule
+    InputNumberModule,
+    FloatLabelModule
   ],
   providers: [MessageService, ConfirmationService]
 })

@@ -1,4 +1,3 @@
-// ordem-servico.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -16,6 +15,22 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Cliente } from '../models/Cliente';
 import { DropdownModule } from 'primeng/dropdown';
+import { Servico } from '../models/Servico';
+import { ServicosService } from '../services/servicos.service';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ItensPeca } from '../models/ItensPeca';
+import { PecaService } from '../services/peca.service';
+import { Peca } from '../models/Peca';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { PickListModule } from 'primeng/picklist';
+import { TabViewModule }  from 'primeng/tabview';
+import { SelectModule } from 'primeng/select';
+import { Veiculo } from '../models/Veiculo';
+import { VeiculoService } from '../services/veiculos.service';
+import { ItensServico } from '../models/ItensServico';
+
+
 
 @Component({
   selector: 'app-ordem-servico',
@@ -30,7 +45,13 @@ import { DropdownModule } from 'primeng/dropdown';
     InputNumberModule,
     ConfirmDialogModule,
     ToastModule,
-    DropdownModule
+    DropdownModule,
+    MultiSelectModule,
+    CheckboxModule,
+    FloatLabelModule,
+    PickListModule,
+    TabViewModule,
+    SelectModule
   ],
   templateUrl: './ordem-servico.component.html',
   styleUrls: ['./ordem-servico.component.css'],
@@ -47,17 +68,30 @@ export class OrdemServicoComponent implements OnInit {
   ordem = {} as Partial<OrdemServicoRequest & { numero: number }>;
   displayDialog = false;
   isEdit = false;
+  servicos: Servico[] = [];
+  pecas: Peca[] = [];
+  veiculos: Veiculo[] = [];
+  itensPeca: ItensPeca[] = [];
+  itensServico: ItensServico[] = [];
+
+  
 
   constructor(
     private http: HttpClient,
     private ordemServicoService: OrdemServicoService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private servicoService: ServicosService,
+    private pecaService: PecaService,
+    private veiculoService: VeiculoService
   ) {}
 
   ngOnInit() {
     this.listarTodos();
     this.loadClientes();
+    this.loadServicos();
+    this.loadPecas();
+    this.loadVeiculo();
   }
 
   private loadClientes(): void {
@@ -69,6 +103,40 @@ export class OrdemServicoComponent implements OnInit {
           summary: 'Erro',
           detail: 'Não foi possível carregar clientes.'
         })
+    });
+  }
+
+  private loadServicos(): void {
+    this.servicoService.listarTodos().subscribe({
+      next: (dados) => {
+        this.servicos = dados;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar serviços:', err);
+      }
+    });
+  }
+
+  private loadVeiculo(): void {
+    this.veiculoService.getVeiculos().subscribe({
+      next: (dados) => {
+        this.veiculos = dados;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar veiculo:', err);
+      }
+    });
+  }
+
+  private loadPecas(){
+    this.pecaService.listarTodos().subscribe({
+      next: (dados) => {
+        this.pecas = dados;
+        console.log('Peças disponíveis:', this.pecas);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar peças:', err);
+      }
     });
   }
 
@@ -112,6 +180,7 @@ export class OrdemServicoComponent implements OnInit {
     this.displayDialog = true;
   }
 
+
   salvar() {
     if (!this.ordem.status || !this.ordem.placaVeiculo || !this.ordem.idCliente) {
       this.messageService.add({
@@ -126,8 +195,10 @@ export class OrdemServicoComponent implements OnInit {
       status: this.ordem.status,
       placaVeiculo: this.ordem.placaVeiculo,
       idCliente: this.ordem.idCliente,
-      itensPeca: this.ordem.itensPeca!,
-      itensServico: this.ordem.itensServico!
+      itensPeca: [],
+      itensServico: [],
+      
+       
     };
 
     if (this.isEdit && this.ordem.numero != null) {

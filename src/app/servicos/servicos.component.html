@@ -18,7 +18,7 @@
       <tr [pSelectableRow]="servico">
         <td>{{ servico.id }}</td>
         <td>{{ servico.nome }}</td>
-        <td>{{ servico.precoUnitario | currency }}</td>
+        <td>{{ servico.precoUnitario | currency : 'BRL' }}</td>
         <td>
           <button pButton icon="pi pi-pencil" severity="success" (click)="editarServico(servico)" class="p-button-rounded p-button-info"></button>
           <button pButton icon="pi pi-trash" (click)="deletarServico(servico.id)" class="p-button-rounded p-button-danger"></button>

@@ -40,48 +40,181 @@
   header="{{ isEdit ? 'Editar Ordem' : 'Nova Ordem' }}"
   [(visible)]="displayDialog"
   [modal]="true"
-  [style]="{ width: '700PX' , height: '600px' }"
+  [style]="{ width: '800px', height: 'auto' }"
   [responsive]="true"
 >
-  <div class="">
-    <div class="p-field">
-      <label for="status">Status</label>
-      <p-dropdown
-        id="status"
-        [options]="statusOptions"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Selecione o status"
-        [(ngModel)]="ordem.status"
-      ></p-dropdown>
-    </div>
+    <div class="grid">
+      <div class="col-6 p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-select
+            [options]="statusOptions"
+            [(ngModel)]="ordem.status"
+            optionLabel="label"
+            styleClass="w-full"
+          ></p-select>
+          <label>Status</label>
+        </p-floatLabel>
+      </div>
 
-    <div class="p-field">
-      <label for="placa">Placa do Veículo</label>
-      <input id="placa" type="text" pInputText [(ngModel)]="ordem.placaVeiculo" />
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="clientes"
+          [(ngModel)]="ordem.idCliente"
+          optionLabel="nome"
+          optionValue="id"
+          styleClass="w-full"
+        ></p-select>
+        <label>Cliente</label>
+      </p-floatLabel>
     </div>
-
-    <div class="p-field">
-      <label for="cliente">Cliente</label>
-      <p-dropdown
-        [options]="clientes"
-        optionLabel="nome"
-        optionValue="id"
-        placeholder="Selecione um cliente"
-        [(ngModel)]="ordem.idCliente"
-        [filter]="true"
-      ></p-dropdown>
+  
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          [options]="veiculos"
+          [(ngModel)]="ordem.placaVeiculo"
+          optionLabel="placa"
+          styleClass="w-full"
+        ></p-select>
+        <label>Veículo</label>
+      </p-floatLabel>
     </div>
   </div>
 
+  <p-tabView>
+    <!-- Aba de Serviços -->
+    <p-tabPanel header="Serviços">
+      <p-pickList
+        [source]="servicos"
+        [target]="ordem.itensServico"
+        sourceHeader="Disponíveis"
+        targetHeader="Selecionados"
+        itemSize="5"
+        styleClass="min-height:250px"
+        [dragdrop]="false"
+        [showSourceFilter]="true"
+        [showTargetFilter]="true"
+        filterBy="nome,preco"
+      >
+        <!-- Template dos itens na coluna de disponíveis -->
+        <ng-template let-servico pTemplate="item">
+          <div class="p-grid p-align-center">
+            <div class="p-col-8">{{ servico.nome }}</div>
+            <div class="p-col-4 text-right">{{ servico.preco | currency:'BRL':'symbol' }}</div>
+          </div>
+        </ng-template>
+  
+        <!-- Template dos itens na coluna de selecionados -->
+        <ng-template let-servico pTemplate="selectedItems">
+          <div class="p-grid p-align-center">
+            <div class="p-col-6">{{ servico.nome }}</div>
+            <div class="p-col-6 text-right">{{ servico.precoUnitario | currency:'BRL':'symbol' }}</div>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </p-tabPanel>
+  
+    <!-- Aba de Peças -->
+    <p-tabPanel header="Peças">
+      <div class="p-col-12">
+        <label class="p-mb-2"><b>PEÇAS USADAS</b></label>
+        <p-table [value]="itensPeca" editable="true" dataKey="idPeca">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 50%">Peça</th>
+              <th style="width: 30%">Quantidade</th>
+              <th style="width: 20%">Ações</th>
+            </tr>
+          </ng-template>
+    
+          <ng-template pTemplate="body" let-item let-ri="rowIndex">
+            <tr>
+              <!-- Dropdown de seleção de peça -->
+              <td pEditableColumn>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-dropdown
+                      [options]="pecas"
+                      optionLabel="nome"
+                      [(ngModel)]="item.idPeca"
+                      [style]="{ width: '100%' }"
+                      [filter]="true"
+                      placeholder="Selecione"
+                    ></p-dropdown>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ item.idPeca?.nome || '—' }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+    
+              <!-- Input de quantidade -->
+              <td pEditableColumn>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-inputNumber
+                      [(ngModel)]="item.quantidade"
+                      [min]="1"
+                      [showButtons]="true"
+                      [style]="{ width: '100%' }"
+                    ></p-inputNumber>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ item.quantidade }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+    
+              <!-- Botão de remover -->
+              <td class="text-center">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger"
+                ></button>
+              </td>
+            </tr>
+          </ng-template>
+    
+          <!-- Footer com botão de adicionar -->
+          <ng-template pTemplate="footer">
+            <tr>
+              <td colspan="3" class="text-right">
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  label="Adicionar Peça"
+                  class="p-button-text"
+                ></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+  
+
   <ng-template pTemplate="footer">
-    <button pButton label="Cancelar" icon="pi pi-times" (click)="displayDialog = false" class="p-button-text"></button>
+    <button
+      pButton
+      label="Cancelar"
+      icon="pi pi-times"
+      (click)="displayDialog = false"
+      class="p-button-text"
+    ></button>
     <button
       pButton
       label="Salvar"
       icon="pi pi-check"
       (click)="salvar()"
-      [disabled]="!ordem.status || !ordem.placaVeiculo || !ordem.idCliente"
+      [disabled]="
+        !ordem.status ||
+        !ordem.placaVeiculo ||
+        !ordem.idCliente      "
     ></button>
   </ng-template>
 </p-dialog>

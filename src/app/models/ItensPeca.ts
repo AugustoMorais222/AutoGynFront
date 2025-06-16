@@ -1,4 +1,4 @@
-import { OrdemServico } from "./Os";
+import { OrdemServico } from "./OrdemServico";
 import { Peca } from "./Peca";
 
 export interface ItensPeca {

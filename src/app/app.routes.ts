@@ -7,6 +7,7 @@ import { OrdemServicoComponent } from './ordem-servico/ordem-servico.component';
 import { TelaVeiculosComponent } from './tela-veiculos/tela-veiculos.component';
 import { TelaModeloComponent } from './tela-modelo/tela-modelo.component';
 import { ServicosComponent } from './servicos/servicos.component';
+import { PecaComponent } from './pecas/peca.component';
 
 export const routes: Routes = [
     { path: 'marcas', component: VeiculoMarcaComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'ordem-servico', component: OrdemServicoComponent },
     { path: 'veiculos', component: TelaVeiculosComponent }, 
     { path: 'modelos', component: TelaModeloComponent },
-    { path: 'servicos', component: ServicosComponent }
+    { path: 'servicos', component: ServicosComponent },
+    { path: 'pecas', component: PecaComponent }
 ];

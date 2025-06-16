@@ -11,7 +11,7 @@
     <ng-template pTemplate="header">
         <tr>
             <th>ID</th>
-            <th>Nome</th>
+            <th>Modelo</th>
             <th>Marca</th>
             <th>Ações</th>
         </tr>
@@ -40,15 +40,16 @@
   [focusOnShow]="false"
 >
   <div class="grid">
-    <div class="col-6 p-field mb-4">
+    <div class="p-field mb-4">
       <p-floatLabel variant="in">
+        <label for="nomeModelo">Nome do Modelo</label>
         <input
           id="nomeModelo"
+          type="text"
           pInputText
           [(ngModel)]="modeloSelecionado.nome"
-          styleClass="w-full"
+          style="width: 100%;"
         />
-        <label for="nomeModelo">Nome do Modelo</label>
       </p-floatLabel>
     </div>
 
@@ -64,7 +65,6 @@
           appendTo="body"
           styleClass="w-full"
         ></p-select>
-        <pre>{{ modeloSelecionado.marca | json }}</pre>
         <label for="marcaModelo">Marca</label>
       </p-floatLabel>
     </div>

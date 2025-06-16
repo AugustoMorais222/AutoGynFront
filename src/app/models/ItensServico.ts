@@ -1,5 +1,5 @@
 import { Funcionario } from "./Funcionario";
-import { OrdemServico } from "./Os";
+import { OrdemServico } from "./OrdemServico";
 import { Servico } from "./Servico";
 
 export interface ItensServico {
