@@ -50,6 +50,7 @@
             [options]="statusOptions"
             [(ngModel)]="ordem.status"
             optionLabel="label"
+            optionValue="value"
             styleClass="w-full"
           ></p-select>
           <label>Status</label>
@@ -75,125 +76,282 @@
           [options]="veiculos"
           [(ngModel)]="ordem.placaVeiculo"
           optionLabel="placa"
+          optionValue="placa"
           styleClass="w-full"
         ></p-select>
         <label>Veículo</label>
       </p-floatLabel>
     </div>
+    <div class="col-6 p-field mb-4">
+        <p-floatLabel variant="in">
+          <p-datepicker 
+            [(ngModel)]="dataAgora"
+            styleClass="w-full"
+            dateFormat="dd/mm/yy"
+            disabled="true"
+          ></p-datepicker >
+          <label>Data</label>
+        </p-floatLabel>
+      </div>
   </div>
 
   <p-tabView>
     <!-- Aba de Serviços -->
     <p-tabPanel header="Serviços">
-      <p-pickList
-        [source]="servicos"
-        [target]="ordem.itensServico"
-        sourceHeader="Disponíveis"
-        targetHeader="Selecionados"
-        itemSize="5"
-        styleClass="min-height:250px"
-        [dragdrop]="false"
-        [showSourceFilter]="true"
-        [showTargetFilter]="true"
-        filterBy="nome,preco"
-      >
-        <!-- Template dos itens na coluna de disponíveis -->
-        <ng-template let-servico pTemplate="item">
-          <div class="p-grid p-align-center">
-            <div class="p-col-8">{{ servico.nome }}</div>
-            <div class="p-col-4 text-right">{{ servico.preco | currency:'BRL':'symbol' }}</div>
-          </div>
-        </ng-template>
-  
-        <!-- Template dos itens na coluna de selecionados -->
-        <ng-template let-servico pTemplate="selectedItems">
-          <div class="p-grid p-align-center">
-            <div class="p-col-6">{{ servico.nome }}</div>
-            <div class="p-col-6 text-right">{{ servico.precoUnitario | currency:'BRL':'symbol' }}</div>
-          </div>
-        </ng-template>
-      </p-pickList>
+       <div class="p-col-12">
+    <label class="p-mb-2"><b>SERVIÇOS EXECUTADOS</b></label>
+    <p-table [value]="itensServico" dataKey="servico.id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 25%">Serviço</th>
+          <th style="width: 15%">Funcionário</th>
+          <th style="width: 10%">Qtd</th>
+          <th style="width: 20%">Horário</th>
+          <th style="width: 15%">Preço Total</th>
+          <th style="width: 15%">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-item let-ri="rowIndex">
+        <tr>
+          <td>{{ item.servico.nome }}</td>
+          <td>{{ item.funcionario.nome }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.horarioInicio | date: 'HH:mm'}} - {{ item.horarioFim | date: 'HH:mm'}}</td>
+          <td>{{ item.precoTotal | currency:'BRL' }}</td>
+          <td class="text-center">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-danger"
+              (click)="removeServico(ri)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="6" class="text-right">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-plus"
+              label="Adicionar Serviço"
+              class="p-button-text"
+              (click)="showAddServicoDialog()"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Diálogo de Adição de Serviço -->
+  <p-dialog
+    header="Adicionar Serviço"
+    [(visible)]="displayAddServicoDialog"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    [closable]="false"
+  >
+    <div class="p-fluid">
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-dropdown
+            inputId="servico"
+            [options]="servicos"
+            optionLabel="nome"
+            [(ngModel)]="newItemServico.servico"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="servico">Serviço</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-dropdown
+            inputId="funcionario"
+            [options]="funcionarios"
+            optionLabel="nome"
+            [(ngModel)]="newItemServico.funcionario"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="funcionario">Funcionário</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-field mb-4">
+        <p-floatlabel variant="in">
+          <p-inputNumber
+            inputId="quantidade"
+            [(ngModel)]="newItemServico.quantidade"
+            [min]="1"
+            [showButtons]="true"
+            styleClass="w-full"
+          ></p-inputNumber>
+          <label for="quantidade">Quantidade</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col mb-4">
+          <p-floatlabel variant="in">
+            <p-datepicker
+              inputId="horarioInicio"
+              [(ngModel)]="newItemServico.horarioInicio"
+              [timeOnly]="true"
+              styleclass="w-full"
+              appendTo="body"
+            />
+            <label for="horarioInicio">Horário Início</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="p-field p-col mb-4">
+          <p-floatlabel variant="in">
+            <p-datepicker
+              inputId="horarioFim"
+              [(ngModel)]="newItemServico.horarioFim"
+              [timeOnly]="true"
+              appendTo="body"
+              inputStyleClass="w-full"
+            />
+            <label for="horarioFim">Horário Fim</label>
+          </p-floatlabel>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="displayAddServicoDialog = false"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="addServico()"
+        [disabled]="!newItemServico.servico || !newItemServico.funcionario"
+      ></button>
+    </ng-template>
+  </p-dialog>
     </p-tabPanel>
   
     <!-- Aba de Peças -->
     <p-tabPanel header="Peças">
       <div class="p-col-12">
-        <label class="p-mb-2"><b>PEÇAS USADAS</b></label>
-        <p-table [value]="itensPeca" editable="true" dataKey="idPeca">
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 50%">Peça</th>
-              <th style="width: 30%">Quantidade</th>
-              <th style="width: 20%">Ações</th>
-            </tr>
-          </ng-template>
-    
-          <ng-template pTemplate="body" let-item let-ri="rowIndex">
-            <tr>
-              <!-- Dropdown de seleção de peça -->
-              <td pEditableColumn>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-dropdown
-                      [options]="pecas"
-                      optionLabel="nome"
-                      [(ngModel)]="item.idPeca"
-                      [style]="{ width: '100%' }"
-                      [filter]="true"
-                      placeholder="Selecione"
-                    ></p-dropdown>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{ item.idPeca?.nome || '—' }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-    
-              <!-- Input de quantidade -->
-              <td pEditableColumn>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-inputNumber
-                      [(ngModel)]="item.quantidade"
-                      [min]="1"
-                      [showButtons]="true"
-                      [style]="{ width: '100%' }"
-                    ></p-inputNumber>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{ item.quantidade }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-    
-              <!-- Botão de remover -->
-              <td class="text-center">
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-trash"
-                  class="p-button-text p-button-danger"
-                ></button>
-              </td>
-            </tr>
-          </ng-template>
-    
-          <!-- Footer com botão de adicionar -->
-          <ng-template pTemplate="footer">
-            <tr>
-              <td colspan="3" class="text-right">
-                <button
-                  pButton
-                  type="button"
-                  icon="pi pi-plus"
-                  label="Adicionar Peça"
-                  class="p-button-text"
-                ></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
+    <label class="p-mb-2"><b>PEÇAS USADAS</b></label>
+    <p-table [value]="itensPeca" dataKey="peca.id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 40%">Peça</th>
+          <th style="width: 20%">Quantidade</th>
+          <th style="width: 20%">Preço Total</th>
+          <th style="width: 20%">Ações</th>
+        </tr>
+      </ng-template>
+
+    <ng-template pTemplate="body" let-item let-ri="rowIndex">
+      <tr>
+        <td>{{ item.peca.nome }}</td>
+        <td>{{ item.quantidade }}</td>
+        <td>{{ item.precoTotal | currency:'BRL' }}</td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-danger"
+            (click)="removePeca(ri)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="4" class="text-right">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Adicionar Peça"
+            class="p-button-text"
+            (click)="showAddPecaDialog()"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Diálogo de Adição de Peça -->
+<p-dialog
+  header="Adicionar Peça"
+  [(visible)]="displayAddPecaDialog"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [closable]="false"
+>
+  <div class="p-fluid">
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <p-dropdown
+        inputId="peca"
+        [options]="pecas"
+        optionLabel="nome"
+        [(ngModel)]="newItemPeca.peca"
+        appendTo="body"
+        styleClass="w-full"
+        ></p-dropdown>
+        <label for="peca">Peça</label>
+      </p-floatlabel>
+    </div>
+
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <p-inputNumber
+        inputId="quantidade"
+        [(ngModel)]="newItemPeca.quantidade"
+        [min]="1"
+        [showButtons]="true"
+        styleClass="w-full"
+        ></p-inputNumber>
+        <label for="quantidade">Quantidade</label>
+      </p-floatlabel>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="displayAddPecaDialog = false"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Salvar"
+      icon="pi pi-check"
+      (click)="addPeca()"
+      [disabled]="!newItemPeca.peca"
+    ></button>
+  </ng-template>
+  </p-dialog>
     </p-tabPanel>
   </p-tabView>
   

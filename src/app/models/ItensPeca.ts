@@ -5,7 +5,7 @@ export interface ItensPeca {
     id: number;
     precoTotal: number;
     quantidade: number;
-    numeroOs: OrdemServico; 
+    numeroOs: OrdemServico | null 
     peca: Peca;
   }
   

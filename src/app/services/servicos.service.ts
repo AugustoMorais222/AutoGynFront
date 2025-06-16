@@ -7,7 +7,7 @@ import { Servicos } from '../models/servicos.model';
   providedIn: 'root'
 })
 export class ServicosService {
-  private apiUrl = 'http://localhost:8080/api/servicos';
+  private apiUrl = 'http://localhost:8081/api/servicos';
 
   constructor(private http: HttpClient) { }
 

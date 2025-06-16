@@ -29,6 +29,10 @@ import { SelectModule } from 'primeng/select';
 import { Veiculo } from '../models/Veiculo';
 import { VeiculoService } from '../services/veiculos.service';
 import { ItensServico } from '../models/ItensServico';
+import { FuncionarioService } from '../services/funcionario.service';
+import { Funcionario } from '../models/Funcionario';
+import { DatePickerModule } from 'primeng/datepicker';
+
 
 
 
@@ -51,7 +55,8 @@ import { ItensServico } from '../models/ItensServico';
     FloatLabelModule,
     PickListModule,
     TabViewModule,
-    SelectModule
+    SelectModule,
+    DatePickerModule
   ],
   templateUrl: './ordem-servico.component.html',
   styleUrls: ['./ordem-servico.component.css'],
@@ -71,10 +76,81 @@ export class OrdemServicoComponent implements OnInit {
   servicos: Servico[] = [];
   pecas: Peca[] = [];
   veiculos: Veiculo[] = [];
-  itensPeca: ItensPeca[] = [];
+  funcionarios: Funcionario[] = [];
+  itensPeca: { precoTotal: number; quantidade: number; peca: Peca; }[] = [];
   itensServico: ItensServico[] = [];
 
-  
+  dataAgora = new Date();
+  displayAddServicoDialog = false;
+  displayAddPecaDialog = false;
+
+  newItemPeca: { precoTotal: number; quantidade: number; peca: Peca | null } = {
+    precoTotal: 0,
+    quantidade: 1,
+    peca: null,
+  };
+
+  newItemServico: ItensServico = {
+    servico: undefined,
+    funcionario: undefined,
+    quantidade: 1,
+    horarioInicio: null,
+    horarioFim: null,
+    precoTotal: 0
+  };
+
+  showAddPecaDialog(): void {
+    this.newItemPeca = { precoTotal: 0, quantidade: 1, peca: null};
+    this.displayAddPecaDialog = true;
+  }
+
+  showAddServicoDialog() {
+    this.displayAddServicoDialog = true;
+  }
+
+  addPeca(): void {
+    const peca = this.newItemPeca.peca
+    if (!peca) {
+      console.log("N deu")
+      return;
+    }
+    const precoUnitario = peca.precoUnitario ?? 0
+    console.log("PReco unitario: "+precoUnitario)
+    this.newItemPeca.precoTotal = this.newItemPeca.quantidade * precoUnitario;
+
+    this.itensPeca = [
+      ...this.itensPeca,
+      {
+        precoTotal: this.newItemPeca.precoTotal,
+        quantidade: this.newItemPeca.quantidade,
+        peca: peca,
+      },
+    ];
+    this.displayAddPecaDialog = false;
+  }
+
+  addServico() {
+    if (this.newItemServico.servico && this.newItemServico.quantidade) {
+      this.newItemServico.precoTotal = this.newItemServico.servico.precoUnitario * this.newItemServico.quantidade;
+      this.itensServico.push({ ...this.newItemServico });
+      this.newItemServico = {
+        servico: undefined,
+        funcionario: undefined,
+        quantidade: 1,
+        horarioInicio: null,
+        horarioFim: null,
+        precoTotal: 0
+      };
+      this.displayAddServicoDialog = false;
+    }
+  }
+
+  removePeca(index: number): void {
+    this.itensPeca = this.itensPeca.filter((_, i) => i !== index);
+  }
+  removeServico(index: number) {
+    this.itensServico.splice(index, 1);
+  }
 
   constructor(
     private http: HttpClient,
@@ -83,19 +159,18 @@ export class OrdemServicoComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private servicoService: ServicosService,
     private pecaService: PecaService,
-    private veiculoService: VeiculoService
+    private veiculoService: VeiculoService,
+    private funcionarioService: FuncionarioService
   ) {}
 
   ngOnInit() {
     this.listarTodos();
     this.loadClientes();
-    this.loadServicos();
-    this.loadPecas();
     this.loadVeiculo();
   }
 
   private loadClientes(): void {
-    this.http.get<Cliente[]>('http://localhost:8080/api/clientes').subscribe({
+    this.http.get<Cliente[]>('http://localhost:8081/api/clientes').subscribe({
       next: data => this.clientes = data,
       error: () =>
         this.messageService.add({
@@ -115,6 +190,30 @@ export class OrdemServicoComponent implements OnInit {
         console.error('Erro ao carregar serviços:', err);
       }
     });
+  }
+
+  private loadFuncionarios(): void {
+    this.funcionarioService.listarTodos().subscribe({
+      next: (dados) => {
+        this.funcionarios = dados;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar Funcionários:', err);
+      }
+    });
+  }
+
+  formatDateToBackend(date: Date | null): string | null {
+    if (!date) return null;
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    return date.getFullYear() + '-' +
+      pad(date.getMonth() + 1) + '-' +
+      pad(date.getDate()) + 'T' +
+      pad(date.getHours()) + ':' +
+      pad(date.getMinutes()) + ':' +
+      pad(date.getSeconds());
   }
 
   private loadVeiculo(): void {
@@ -162,9 +261,14 @@ export class OrdemServicoComponent implements OnInit {
       itensServico: []
     };
     this.displayDialog = true;
+    this.loadServicos();
+    this.loadPecas();
+    this.loadFuncionarios();
   }
 
   editar(os: OrdemServico) {
+    this.listarItensServico(os.numero)
+    this.listarItensPeca(os.numero)
     this.isEdit = true;
     this.ordem = {
       numero: os.numero,
@@ -174,10 +278,55 @@ export class OrdemServicoComponent implements OnInit {
           ? os.placaVeiculo
           : os.placaVeiculo.placa,
       idCliente: os.cliente.id,
-      itensPeca: [],
-      itensServico: []
+      itensPeca: this.itensPeca.map(item => ({
+        quantidade: item.quantidade,
+        pecaId: item.peca.id as number,
+      })),
+      itensServico: this.itensServico.map(item => ({
+          horarioInicio: this.formatDateToBackend(item.horarioInicio),
+          horarioFim: this.formatDateToBackend(item.horarioFim),
+          quantidade: item.quantidade,
+          funcionarioId: item.funcionario!.id!,
+          servicoId: item.servico!.id,
+        }))
     };
     this.displayDialog = true;
+  }
+
+  listarItensServico(numero: number){
+    this.ordemServicoService.listarItensServico(numero).subscribe({ 
+        next: (data) => {
+          this.itensServico = data;
+          console.log("Itens servico: "+this.itensServico)
+        },
+        error: () =>{
+           this.messageService.add({
+            severity: 'error',
+            summary: 'Atenção',
+            detail: 'Não foi possível buscar os serviços da Ordem de Serviço.'
+          });
+      return;
+        }
+      
+      })
+  }
+
+  listarItensPeca(numero: number){
+    this.ordemServicoService.listarItensPeca(numero).subscribe({ 
+        next: (data) => {
+          this.itensPeca = data;
+          console.log("Itens peca: "+this.itensPeca)
+        },
+        error: () =>{
+           this.messageService.add({
+            severity: 'error',
+            summary: 'Atenção',
+            detail: 'Não foi possível buscar as peças da Ordem de Serviço.'
+          });
+      return;
+        }
+      
+      })
   }
 
 
@@ -190,14 +339,28 @@ export class OrdemServicoComponent implements OnInit {
       });
       return;
     }
+    const itensComId = this.itensPeca.filter(item => item.peca.id != null);
+    const itensServicoComIds = this.itensServico.filter(
+      item => item.servico?.id != null && item.funcionario?.id != null
+    );
 
+    console.log("Valor status: "+this.ordem.status)
     const dto: OrdemServicoRequest = {
       status: this.ordem.status,
       placaVeiculo: this.ordem.placaVeiculo,
       idCliente: this.ordem.idCliente,
-      itensPeca: [],
-      itensServico: [],
-      
+      itensPeca: itensComId.map(item => ({
+        quantidade: item.quantidade,
+        pecaId: item.peca.id as number,
+      })),
+      itensServico: itensServicoComIds.map(item => ({
+          horarioInicio: this.formatDateToBackend(item.horarioInicio),
+          horarioFim: this.formatDateToBackend(item.horarioFim),
+          quantidade: item.quantidade,
+          funcionarioId: item.funcionario!.id!,
+          servicoId: item.servico!.id,
+        }))
+        
        
     };
 
