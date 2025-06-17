@@ -112,7 +112,7 @@
 
       <ng-template pTemplate="body" let-item let-ri="rowIndex">
         <tr>
-          <td>{{ item.servico?.nome }}</td>
+          <td>{{ item.idServico?.nome }}</td>
           <td>{{ item.funcionario.nome }}</td>
           <td>{{ item.quantidade }}</td>
           <td>{{ item.horarioInicio | date: 'HH:mm'}} - {{ item.horarioFim | date: 'HH:mm'}}</td>
