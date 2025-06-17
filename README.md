@@ -59,24 +59,6 @@ ng build --configuration production
 
 Os arquivos resultantes serão gerados na pasta `dist/`.
 
-## Executando testes unitários
-
-Para rodar os testes unitários com o [Karma](https://karma-runner.github.io):
-
-```bash
-ng test
-```
-
-## Testes de ponta a ponta (e2e)
-
-Se você configurou testes e2e (como com Cypress ou Protractor), execute:
-
-```bash
-ng e2e
-```
-
-> ⚠️ Observação: Angular CLI não inclui uma ferramenta de e2e por padrão. Escolha e configure a que preferir.
-
 ## Recursos adicionais
 
 - [Documentação do Angular CLI](https://angular.dev/tools/cli)
