@@ -49,4 +49,12 @@ export class OrdemServicoService {
   listarItensPeca(numero: number): Observable<ItensPeca[]>{
     return this.http.get<ItensPeca[]>(`${this.apiUrl}/${numero}/itensPeca`)
   }
+
+  deletarItemServico(servicoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${servicoId}/itensServico`);
+  }
+
+  deletarItemPeca(pecaId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${pecaId}/itensPeca`);
+  }
 }
