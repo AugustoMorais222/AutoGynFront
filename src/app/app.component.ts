@@ -38,6 +38,7 @@ export class AppComponent {
     { label: 'Funcionário', routerLink: '/funcionarios' },
     { label: 'Cliente', routerLink: '/clientes' },
     { label: 'Acessório', routerLink: '/acessorios' },
-    { label: 'Ordem Serviço', routerLink: '/ordem-servico' }
+    { label: 'Ordem Serviço', routerLink: '/ordem-servico' },
+    { label: 'Consulta avançada de serviços', routerLink: '/consulta-servico'}
   ];
 }

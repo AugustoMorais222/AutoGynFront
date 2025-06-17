@@ -8,6 +8,7 @@ import { TelaVeiculosComponent } from './tela-veiculos/tela-veiculos.component';
 import { TelaModeloComponent } from './tela-modelo/tela-modelo.component';
 import { ServicosComponent } from './servicos/servicos.component';
 import { PecaComponent } from './pecas/peca.component';
+import { ConsultaServicoComponent } from './consulta-servico/consulta-servico.component';
 
 export const routes: Routes = [
     { path: 'marcas', component: VeiculoMarcaComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'veiculos', component: TelaVeiculosComponent }, 
     { path: 'modelos', component: TelaModeloComponent },
     { path: 'servicos', component: ServicosComponent },
-    { path: 'pecas', component: PecaComponent }
+    { path: 'pecas', component: PecaComponent },
+    {path: 'consulta-servico', component: ConsultaServicoComponent}
 ];
