@@ -77,7 +77,7 @@ export class OrdemServicoComponent implements OnInit {
   pecas: Peca[] = [];
   veiculos: Veiculo[] = [];
   funcionarios: Funcionario[] = [];
-  itensPeca: { precoTotal: number; quantidade: number; peca: Peca; }[] = [];
+  itensPeca: { id: number; precoTotal: number; quantidade: number; peca: Peca; }[] = [];
   itensServico: ItensServico[] = [];
 
   dataAgora = new Date();
@@ -121,6 +121,7 @@ export class OrdemServicoComponent implements OnInit {
     this.itensPeca = [
       ...this.itensPeca,
       {
+        id: 0,
         precoTotal: this.newItemPeca.precoTotal,
         quantidade: this.newItemPeca.quantidade,
         peca: peca,
@@ -146,10 +147,65 @@ export class OrdemServicoComponent implements OnInit {
   }
 
   removePeca(index: number): void {
-    this.itensPeca = this.itensPeca.filter((_, i) => i !== index);
+    if (!this.isEdit) {
+      this.itensPeca = this.itensPeca.filter((_, i) => i !== index);
+    } else {
+      const item = this.itensPeca[index];
+  
+      this.ordemServicoService.deletarItemPeca(item.id).subscribe({
+        next: () => {
+          this.itensPeca = this.itensPeca.filter((_, i) => i !== index);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Item removido com sucesso.'
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao remover o item.'
+          });
+          console.error('Erro ao excluir item:', err);
+        }
+      });
+    }
   }
   removeServico(index: number) {
-    this.itensServico.splice(index, 1);
+    if (!this.isEdit) {
+      this.itensServico = this.itensServico.filter((_, i) => i !== index);
+    } else {
+      const item = this.itensServico[index];
+      
+      if (!item || item.id === undefined) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atenção',
+          detail: 'Item inválido ou ainda não salvo.'
+        });
+        return;
+      }
+  
+      this.ordemServicoService.deletarItemServico(item.id).subscribe({
+        next: () => {
+          this.itensServico = this.itensServico.filter((_, i) => i !== index);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Item removido com sucesso.'
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao remover o item.'
+          });
+          console.error('Erro ao excluir item:', err);
+        }
+      });
+    }
   }
 
   constructor(
@@ -267,7 +323,9 @@ export class OrdemServicoComponent implements OnInit {
   }
 
   editar(os: OrdemServico) {
-    
+    this.loadServicos();
+    this.loadPecas();
+    this.loadFuncionarios();
     this.isEdit = true;
     this.ordem = {
       numero: os.numero,
@@ -280,6 +338,7 @@ export class OrdemServicoComponent implements OnInit {
       itensPeca: [],
       itensServico: []
     };
+    this.dataAgora = new Date(os.data + 'T00:00:00');
     this.listarItensServico(os.numero)
     this.listarItensPeca(os.numero)
     setTimeout(() => {

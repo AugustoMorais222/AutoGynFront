@@ -196,30 +196,31 @@
       </div>
 
       <div class="p-formgrid p-grid">
-        <div class="p-field p-col mb-4">
-          <p-floatlabel variant="in">
+        <div class="p-field mb-4">
+          <p-floatLabel variant="in">
             <p-datepicker
               inputId="horarioInicio"
               [(ngModel)]="newItemServico.horarioInicio"
-              [timeOnly]="true"
-              styleclass="w-full"
+              [showTime]="true"
+              [hourFormat]="'24'"
+              styleClass="w-full"
               appendTo="body"
             />
             <label for="horarioInicio">Horário Início</label>
-          </p-floatlabel>
+          </p-floatLabel>
         </div>
-
-        <div class="p-field p-col mb-4">
-          <p-floatlabel variant="in">
+        <div class="p-field mb-4">
+          <p-floatLabel variant="in">
             <p-datepicker
               inputId="horarioFim"
               [(ngModel)]="newItemServico.horarioFim"
-              [timeOnly]="true"
+              [showTime]="true"
+              [hourFormat]="'24'"
+              styleClass="w-full"
               appendTo="body"
-              inputStyleClass="w-full"
             />
             <label for="horarioFim">Horário Fim</label>
-          </p-floatlabel>
+          </p-floatLabel>
         </div>
       </div>
     </div>
