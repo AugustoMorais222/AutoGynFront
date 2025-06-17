@@ -54,9 +54,15 @@
         [(ngModel)]="veiculoSelecionado.placa"
         inputId="placa"
         style="width:100%;"
+        pattern="^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$"
+        #placa="ngModel"
       />
       <label for="placa">Placa</label>
     </p-floatLabel>
+  </div>
+  <div *ngIf="placa.invalid && placa.touched" style="color: red; font-size: 0.875rem;">
+    <div *ngIf="placa.errors?.['required']">Placa é obrigatória.</div>
+    <div *ngIf="placa.errors?.['pattern']">Formato de placa inválido. Ex: ABC1234 ou ABC1D23</div>
   </div>
 
   <div class="p-field mb-4">
