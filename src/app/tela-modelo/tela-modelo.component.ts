@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModeloService } from '../services/tela-modelo.service';
-import { TelaModelo } from '../models/tela-modelo.model';
 import { Marca } from '../models/Marca';
 import { MarcaService } from '../services/marca.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -13,8 +12,12 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { RippleModule } from 'primeng/ripple';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { Modelo } from '../models/Modelo';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-tela-modelo',
@@ -32,15 +35,17 @@ import { RippleModule } from 'primeng/ripple';
     ToolbarModule,
     ConfirmDialogModule,
     InputTextModule,
-    DropdownModule
+    SelectModule,
+    FloatLabelModule
   ],
   providers: [MessageService, ConfirmationService]
 })
 export class TelaModeloComponent implements OnInit {
   dialogTitle: string = 'Modelo';
-  modelos: TelaModelo[] = [];
-  modeloSelecionado: TelaModelo = { id: 0, nome: '', marca: undefined };
+  modelos: Modelo[] = [];
+  modeloSelecionado: Modelo = { id: 0, nome: '', marca: undefined };
   selectedMarcaId: number | undefined;
+  marca: Marca = {id: 0}
   marcas: Marca[] = [];
   displayDialog: boolean = false;
 
@@ -59,22 +64,29 @@ export class TelaModeloComponent implements OnInit {
   listarTodos() {
     this.modeloService.getModelos().subscribe(
       data => {
-        // Mapeia propriedade 'marca' do JSON para 'idMarca' do modelo
         this.modelos = data.map(m => ({
           id: m.id,
           nome: m.nome,
           idMarca: (m as any).marca
-        } as TelaModelo));
+        } as Modelo));
       },
       () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar modelos.' })
     );
   }
 
   listarMarcas() {
-    this.marcaService.listarTodos().subscribe(
-      data => (this.marcas = data),
-      () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar marcas.' })
-    );
+    this.marcaService.listarTodos().subscribe({
+      next: data => {
+        this.marcas = data;
+        console.log('>> marcas para dropdown:', this.marcas);
+      },
+      error: () =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao carregar marcas.'
+        })
+    });
   }
 
   showDialogToAdd() {
@@ -84,38 +96,52 @@ export class TelaModeloComponent implements OnInit {
     this.displayDialog = true;
   }
 
-  editarModelo(modelo: TelaModelo) {
+  editarModelo(modelo: Modelo) {
     this.dialogTitle = 'Editar Modelo';
-    this.modeloSelecionado = { ...modelo };
+    this.modeloSelecionado = {
+      id: modelo.id,
+      nome: modelo.nome,
+      marca: modelo.marca
+    };    
     this.selectedMarcaId = modelo.marca?.id;
     this.displayDialog = true;
   }
 
   salvarModelo() {
-    if (!this.modeloSelecionado.nome || !this.modeloSelecionado.marca) {
-  this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos.' });
-  return;
-}
+    if (!this.modeloSelecionado.nome) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Preencha todos os campos.'
+      });
+      return;
+    }
 
-    const payload = {
-      nome: this.modeloSelecionado.nome,
-      marca: { id: this.selectedMarcaId }
-    };
+    const isEdit = !!this.modeloSelecionado.id;
+    const operacao$: Observable<void> = isEdit
+      ? this.modeloService.updateModelo(this.modeloSelecionado)
+      : this.modeloService.addModelo(this.modeloSelecionado);
 
-
-    const operacao = this.modeloSelecionado.id
-      ? this.modeloService.updateModelo(this.modeloSelecionado.id, payload)
-      : this.modeloService.addModelo(payload);
-
-    operacao.subscribe(
-      () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: `Modelo ${this.modeloSelecionado.id ? 'atualizado' : 'adicionado'} com sucesso.` });
+    operacao$.subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: `Modelo ${isEdit ? 'atualizado' : 'adicionado'} com sucesso.`
+        });
         this.listarTodos();
         this.displayDialog = false;
         this.selectedMarcaId = undefined;
+        this.modeloSelecionado = { id: 0, nome: '', marca: null };
       },
-      () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar modelo.' })
-    );
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: `Erro ao ${isEdit ? 'atualizar' : 'adicionar'} modelo.`
+        });
+      }
+    });
   }
 
   cancelDialog() {

@@ -11,7 +11,7 @@
     <ng-template pTemplate="header">
         <tr>
             <th>ID</th>
-            <th>Nome</th>
+            <th>Modelo</th>
             <th>Marca</th>
             <th>Ações</th>
         </tr>
@@ -31,30 +31,70 @@
     </ng-template>
 </p-table>
 
-<p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true"
-    [style]="{ width: '600px', 'max-width': '90vw' }" [focusOnShow]="false">
-    <div class="p-fluid">
-        <div class="p-field">
-            <label for="nome">Nome</label>
-            <input id="nome" pInputText [(ngModel)]="modeloSelecionado.nome" />
-        </div>
-        <div class="p-field">
-            <label for="marca">Marca</label>
-            <p-dropdown class="white-dropdown" [options]="marcas" [(ngModel)]="selectedMarcaId"
-                optionLabel="nome" optionValue="id" placeholder="Selecione uma marca" appendTo="body"
-                [showClear]="true">
-            </p-dropdown>
-
-        </div>
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [responsive]="true"
+  [style]="{ width: '600px', 'max-width': '90vw' }"
+  [focusOnShow]="false"
+>
+  <div class="grid">
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="nomeModelo">Nome do Modelo</label>
+        <input
+          id="nomeModelo"
+          type="text"
+          pInputText
+          [(ngModel)]="modeloSelecionado.nome"
+          style="width: 100%;"
+        />
+      </p-floatLabel>
     </div>
-    <ng-template pTemplate="footer">
-        <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="cancelDialog()"></button>
-        <button pButton [label]="modeloSelecionado.id ? 'Editar' : 'Adicionar'" icon="pi pi-check"
-            class="p-button-success" (click)="salvarModelo()"
-            [disabled]="!modeloSelecionado.nome || !selectedMarcaId"></button>
-        <button *ngIf="modeloSelecionado.id" pButton label="Excluir" icon="pi pi-trash" class="p-button-danger"
-            (click)="deleteFromDialog()"></button>
-    </ng-template>
+
+    <div class="col-6 p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-select
+          id="marcaModelo"
+          name="marcaModelo" 
+          [options]="marcas"
+          [(ngModel)]="modeloSelecionado.marca"
+          optionLabel="nome"
+          showClear="true"
+          appendTo="body"
+          styleClass="w-full"
+        ></p-select>
+        <label for="marcaModelo">Marca</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="cancelDialog()"
+    ></button>
+    <button
+      pButton
+      [label]="modeloSelecionado.id ? 'Editar' : 'Adicionar'"
+      icon="pi pi-check"
+      class="p-button-success"
+      (click)="salvarModelo()"
+      [disabled]="!modeloSelecionado.nome || !modeloSelecionado.marca"
+    ></button>
+    <button
+      *ngIf="modeloSelecionado.id"
+      pButton
+      label="Excluir"
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="deleteFromDialog()"
+    ></button>
+  </ng-template>
 </p-dialog>
 
 <p-confirmDialog acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>

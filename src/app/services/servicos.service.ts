@@ -1,4 +1,3 @@
-// src/app/services/servico.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,7 +7,7 @@ import { Servicos } from '../models/servicos.model';
   providedIn: 'root'
 })
 export class ServicosService {
-  private apiUrl = 'http://localhost:8080/api/servicos'; // URL do backend
+  private apiUrl = 'http://localhost:8080/api/servicos';
 
   constructor(private http: HttpClient) { }
 

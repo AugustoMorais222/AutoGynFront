@@ -22,7 +22,7 @@
       <td>{{ peca.id }}</td>
       <td>{{ peca.codigo }}</td>
       <td>{{ peca.nome }}</td>
-      <td>{{ peca.precoUnitario | currency }}</td>
+      <td>{{ peca.precoUnitario | currency : 'BRL' }}</td>
       <td>{{ peca.quantidade }}</td>
       <td>
         <button pButton icon="pi pi-pencil" severity="info" (click)="editarPeca(peca)" class="p-button-rounded p-button-info"></button>
@@ -32,29 +32,90 @@
   </ng-template>
 </p-table>
 
-<p-dialog [header]="dialogTitle" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '600px', 'max-width': '90vw' }">
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [responsive]="true"
+  [style]="{ width: '600px', 'max-width': '90vw' }"
+>
   <div class="p-fluid">
-    <div class="p-field">
-      <label for="codigo">Código</label>
-      <input id="codigo" pInputText [(ngModel)]="pecaSelecionada.codigo" />
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <label for="nome">Codigo</label>
+        <input
+          id="codigo"
+          type="text"
+          pInputText
+          [(ngModel)]="pecaSelecionada.codigo"
+          style="width: 100%;"
+        />
+      </p-floatLabel>
     </div>
-    <div class="p-field">
-      <label for="nome">Nome</label>
-      <input id="nome" pInputText [(ngModel)]="pecaSelecionada.nome" />
+
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <input
+          id="nome"
+          pInputText
+          [(ngModel)]="pecaSelecionada.nome"
+          style="width: 100%;"
+        />
+        <label for="nome">Nome</label>
+      </p-floatlabel>
     </div>
-    <div class="p-field">
-      <label for="precoUnitario">Preço Unitário</label>
-      <p-inputNumber id="precoUnitario" [(ngModel)]="pecaSelecionada.precoUnitario" mode="currency" currency="BRL" locale="pt-BR"></p-inputNumber>
+
+    <div class="p-field mb-4">
+      <p-floatLabel variant="in">
+        <p-inputNumber
+          inputId="precoUnitario"
+          [(ngModel)]="pecaSelecionada.precoUnitario"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          styleClass="w-full"
+        />
+        <label for="salario">Preço Unitário</label>
+      </p-floatLabel>
     </div>
-    <div class="p-field">
-      <label for="quantidade">Quantidade</label>
-      <p-inputNumber id="quantidade" [(ngModel)]="pecaSelecionada.quantidade" [min]="0"></p-inputNumber>
+
+    <div class="p-field mb-4">
+      <p-floatlabel variant="in">
+        <p-inputNumber
+          id="quantidade"
+          [(ngModel)]="pecaSelecionada.quantidade"
+          [min]="0"
+          styleClass="w-full"
+        ></p-inputNumber>
+        <label for="quantidade">Quantidade</label>
+      </p-floatlabel>
     </div>
   </div>
+
   <ng-template pTemplate="footer">
-    <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="cancelDialog()"></button>
-    <button pButton [label]="pecaSelecionada.id ? 'Editar' : 'Adicionar'" icon="pi pi-check" class="p-button-success" (click)="salvarPeca()" [disabled]="!pecaSelecionada.codigo || !pecaSelecionada.nome"></button>
-    <button *ngIf="pecaSelecionada.id" pButton label="Excluir" icon="pi pi-trash" class="p-button-danger" (click)="deleteFromDialog()"></button>
+    <button
+      pButton
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="cancelDialog()"
+    ></button>
+    <button
+      pButton
+      [label]="pecaSelecionada.id ? 'Editar' : 'Adicionar'"
+      icon="pi pi-check"
+      class="p-button-success"
+      (click)="salvarPeca()"
+      [disabled]="!pecaSelecionada.codigo || !pecaSelecionada.nome"
+    ></button>
+    <button
+      *ngIf="pecaSelecionada.id"
+      pButton
+      label="Excluir"
+      icon="pi pi-trash"
+      class="p-button-danger"
+      (click)="deleteFromDialog()"
+    ></button>
   </ng-template>
 </p-dialog>
 
