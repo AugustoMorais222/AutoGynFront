@@ -1,59 +1,83 @@
 # Autogynfront
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+Este projeto é o front-end do sistema **AutoGyn**, desenvolvido com [Angular CLI](https://github.com/angular/angular-cli) versão 19.2.11.
 
-## Development server
+## Pré-requisitos
 
-To start a local development server, run:
+Antes de rodar o projeto, certifique-se de ter instalado:
+
+- [Node.js](https://nodejs.org/) (recomendado: versão 18 ou superior)
+- [Angular CLI](https://angular.io/cli): instale com o comando  
+  ```bash
+  npm install -g @angular/cli
+  ```
+- Um gerenciador de pacotes como `npm` (instalado com o Node.js)
+
+## Instalando dependências
+
+Após clonar o repositório, instale as dependências do projeto:
+
+```bash
+npm install
+```
+
+## Rodando o servidor de desenvolvimento
+
+Para iniciar o servidor local de desenvolvimento, execute:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Depois, acesse a aplicação no navegador:  
+[http://localhost:4200](http://localhost:4200)
 
-## Code scaffolding
+A aplicação será recarregada automaticamente sempre que houver mudanças no código-fonte.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Gerando componentes automaticamente
+
+Você pode gerar novos componentes, serviços, módulos e outros artefatos Angular com os comandos da CLI.  
+Por exemplo, para gerar um novo componente:
 
 ```bash
-ng generate component component-name
+ng generate component nome-do-componente
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Para ver todos os comandos disponíveis:
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## Compilando para produção
 
-To build the project run:
+Para gerar os arquivos otimizados para produção, execute:
 
 ```bash
-ng build
+ng build --configuration production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Os arquivos resultantes serão gerados na pasta `dist/`.
 
-## Running unit tests
+## Executando testes unitários
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Para rodar os testes unitários com o [Karma](https://karma-runner.github.io):
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Testes de ponta a ponta (e2e)
 
-For end-to-end (e2e) testing, run:
+Se você configurou testes e2e (como com Cypress ou Protractor), execute:
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+> ⚠️ Observação: Angular CLI não inclui uma ferramenta de e2e por padrão. Escolha e configure a que preferir.
 
-## Additional Resources
+## Recursos adicionais
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Documentação do Angular CLI](https://angular.dev/tools/cli)
+- [Documentação oficial do Angular](https://angular.dev/)
